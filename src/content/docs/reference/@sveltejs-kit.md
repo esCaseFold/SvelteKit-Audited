@@ -1,14 +1,8 @@
 ---
 title: "@sveltejs/kit"
+sidebar:
+    order: 1
 ---
-
-//```js {2-3}
-//function demo() {
-  // This line (#2) and the next one are highlighted
-  //return 'This is line #3 of this snippet';
-//}
-//```
-
 
 ```js
 import {
@@ -160,12 +154,13 @@ function redirect(
 ): never;
 ```
 ## text
-Create a Response object from the supplied body.
-
+Create a `Response` object from the supplied body.
+```js
 function text(body: string, init?: ResponseInit): Response;
-Action
-Shape of a form action method that is part of export const actions = {...} in +page.server.js. See form actions for more information.
-
+```
+## Action
+Shape of a form action method that is part of `export const actions = {...}` in `+page.server.js`. See [form actions](/core-concepts/form-actions/) for more information.
+```js
 type Action<
 	Params extends AppLayoutParams<'/'> =
 		AppLayoutParams<'/'>,
@@ -177,20 +172,31 @@ type Action<
 > = (
 	event: RequestEvent<Params, RouteId>
 ) => MaybePromise<OutputData>;
-ActionFailure
+```
+## ActionFailure
+```js
 interface ActionFailure<T = undefined> {…}
+```
+```js
 status: number;
+```
+```js
 data: T;
+```
+```js
 [uniqueSymbol]: true;
-ActionResult
+```
+
+## ActionResult
 When calling a form action via fetch, the response will be one of these shapes.
-
-
+```js
 <form method="post" use:enhance={() => {
 	return ({ result }) => {
 		// result is of type ActionResult
 	};
 }}
+```
+```js
 type ActionResult<
 	Success extends Record<string, unknown> | undefined =
 		Record<string, any>,
@@ -201,9 +207,10 @@ type ActionResult<
 	| { type: 'failure'; status: number; data?: Failure }
 	| { type: 'redirect'; status: number; location: string }
 	| { type: 'error'; status?: number; error: any };
-Actions
-Shape of the export const actions = {...} object in +page.server.js. See form actions for more information.
-
+```
+## Actions
+Shape of the `export const actions = {...}` object in `+page.server.js`. See form actions for more information.
+```js
 type Actions<
 	Params extends AppLayoutParams<'/'> =
 		AppLayoutParams<'/'>,
@@ -213,29 +220,57 @@ type Actions<
 	> | void,
 	RouteId extends AppRouteId | null = AppRouteId | null
 > = Record<string, Action<Params, OutputData, RouteId>>;
-Adapter
-Adapters are responsible for taking the production build and turning it into something that can be deployed to a platform of your choosing.
+```
 
+## Adapter
+Figure out how to do a good line indent OR come up with a better organization than this shit!
+
+[Adapters](/build-and-deploy/adapters) are responsible for taking the production build and turning it into something that can be deployed to a platform of your choosing.
+```js
 interface Adapter {…}
+```
+```js
 name: string;
+```
+//!!!!! put
 The name of the adapter, using for logging. Will typically correspond to the package name.
+```js
 adapt: (builder: Builder) => MaybePromise<void>;
-builder An object provided by SvelteKit that contains methods for adapting the app
+```
+indent here
+`builder` An object provided by SvelteKit that contains methods for adapting the app
+
 This function is called after SvelteKit has built your app.
+```js
 supports?: {…}
+```
+indent all of this
 Checks called during dev and build to determine whether specific features will work in production with this adapter.
 
+indent this more
+```js
 read?: (details: { config: any; route: { id: string } }) => boolean;
-details.config The merged adapter-specific route config exported from the route with export const config
-Test support for read from $app/server.
+```
+indent this under code snippet
+`details.config` The merged adapter-specific route config exported from the route with export const config
+indent this less
+Test support for `read` from `$app/server`.
+```js
 instrumentation?: () => boolean;
+```
+indent even more!
 AVAILABLE SINCE v2.31.0
-Test support for instrumentation.server.js. To pass, the adapter must support running instrumentation.server.js prior to the application code.
-emulate?: () => MaybePromise<Emulator>;
-Creates an Emulator, which allows the adapter to influence the environment during dev, build and prerendering.
-AfterNavigate
-The argument passed to afterNavigate callbacks.
 
+[less indent]
+Test support for `instrumentation.server.js`. To pass, the adapter must support running `instrumentation.server.js` prior to the application code.
+```js
+emulate?: () => MaybePromise<Emulator>;
+```
+Creates an `Emulator`, which allows the adapter to influence the environment during dev, build and prerendering.
+
+## AfterNavigate
+The argument passed to [`afterNavigate`](https://svelte.dev/docs/kit/$app-navigation#afterNavigate) callbacks.
+```js
 type AfterNavigate = (Navigation | NavigationEnter) & {
 	type: Exclude<NavigationType, 'leave'>;
 	/**
@@ -243,7 +278,10 @@ type AfterNavigate = (Navigation | NavigationEnter) & {
 	 */
 	willUnload: false;
 };
-AwaitedActions
+```
+
+## AwaitedActions
+```js
 type AwaitedActions<
 	T extends Record<string, (...args: any) => any>
 > = OptionalUnion<
@@ -253,65 +291,110 @@ type AwaitedActions<
 		>;
 	}[keyof T]
 >;
-BeforeNavigate
-The argument passed to beforeNavigate callbacks.
+```
 
+## BeforeNavigate
+The argument passed to `beforeNavigate` callbacks.
+```js
 type BeforeNavigate = Navigation & {
 	/**
 	 * Call this to prevent the navigation from starting.
 	 */
 	cancel: () => void;
 };
-Builder
-This object is passed to the adapt function of adapters. It contains various methods and properties that are useful for adapting the app.
+```
 
+## Builder
+This object is passed to the `adapt` function of adapters. It contains various methods and properties that are useful for adapting the app.
+```js
 interface Builder {…}
+```
+```js
 log: Logger;
+```
+[indent here]
 Print messages to the console. log.info and log.minor are silent unless Vite’s logLevel is info.
+```js
 rimraf: (dir: string) => void;
-Remove dir and all its contents.
+```
+[indent here]
+Remove `dir` and all its contents.
+```js
 mkdirp: (dir: string) => void;
-Create dir and any required parent directories.
+```
+[indent here]
+Create `dir` and any required parent directories.
+```js
 config: ValidatedConfig;
-The fully resolved Svelte config.
+```
+[indent here]The fully resolved Svelte config.
+```js
 prerendered: Prerendered;
-Information about prerendered pages and assets, if any.
+```
+[indent here]Information about prerendered pages and assets, if any.
+```js
 routes: RouteDefinition[];
+```
 An array of all routes (including prerendered)
+```js
 createEntries: (fn: (route: RouteDefinition) => AdapterEntry) => Promise<void>;
-fn A function that groups a set of routes into an entry point
-DEPRECATED Use builder.routes instead
+```
+[double indent]`fn` A function that groups a set of routes into an entry point
+DEPRECATED[greyed out] Use `builder.routes` instead
 Create separate functions that map to one or more routes of your app.
+```js
 findServerAssets: (routes: RouteDefinition[]) => string[];
-Find all the assets imported by server files belonging to routes
+```
+Find all the assets imported by server files belonging to `routes`
+```js
 generateFallback: (dest: string) => Promise<void>;
+```
 Generate a fallback page for a static webserver to use when no route is matched. Useful for single-page apps.
+```js
 generateEnvModule: () => void;
-Generate a module exposing build-time environment variables as $env/dynamic/public or $app/env/public if the app uses it.
+```
+Generate a module exposing build-time environment variables as `$env/dynamic/public` or `$app/env/public` if the app uses it.
+```js
 generateManifest: (opts: { relativePath: string; routes?: RouteDefinition[] }) => string;
-opts a relative path to the base directory of the app and optionally in which format (esm or cjs) the manifest should be generated
+```
+`opts` a relative path to the base directory of the app and optionally in which format (esm or cjs) the manifest should be generated
 Generate a server-side manifest to initialise the SvelteKit server with.
+```js
 getBuildDirectory: (name: string) => string;
+```
 name path to the file, relative to the build directory
-Resolve a path to the name directory inside outDir, e.g. /path/to/.svelte-kit/my-adapter.
+Resolve a path to the `name` directory inside `outDir`, e.g. `/path/to/.svelte-kit/my-adapter`.
+```js
 getClientDirectory: () => string;
+```
 Get the fully resolved path to the directory containing client-side assets, including the contents of your static directory.
+```js
 getServerDirectory: () => string;
+```
 Get the fully resolved path to the directory containing server-side code.
+```js
 getAppPath: () => string;
-Get the application path including any configured base path, e.g. my-base-path/_app.
+```
+Get the application path including any configured `base` path, e.g. `my-base-path/_app`.
+```js
 writeClient: (dest: string) => string[];
-dest the destination folder
-RETURNS an array of files written to dest
-Write client assets to dest.
+```
+`dest` the destination folder
+RETURNS[greyed out] an array of files written to `dest`
+Write client assets to `dest`.
+```js
 writePrerendered: (dest: string) => string[];
-dest the destination folder
-RETURNS an array of files written to dest
-Write prerendered files to dest.
+```
+`dest` the destination folder
+RETURNS[greyed out] an array of files written to `dest`
+Write prerendered files to `dest`.
+```js
 writeServer: (dest: string) => string[];
-dest the destination folder
-RETURNS an array of files written to dest
-Write server-side code to dest.
+```
+`dest` the destination folder
+RETURNS[greyed out] an array of files written to `dest`
+Write server-side code to `dest`.
+```js
 copy: (
 	from: string,
 	to: string,
@@ -320,16 +403,24 @@ copy: (
 		replace?: Record<string, string>;
 	}
 ) => string[];
-from the source file or directory
-to the destination file or directory
-opts.filter a function to determine whether a file or directory should be copied
-opts.replace a map of strings to replace
-RETURNS an array of files that were copied
+```
+[double indent]
+`from` the source file or directory
+`to` the destination file or directory
+`opts.filter` a function to determine whether a file or directory should be copied
+`opts.replace` a map of strings to replace
+RETURNS[greyed out] an array of files that were copied
 Copy a file or directory.
+```js
 hasServerInstrumentationFile: () => boolean;
-RETURNS true if the server instrumentation file exists, false otherwise
+```
+[double indent]
+RETURNS[greyed out] true if the server instrumentation file exists, false otherwise
+
 AVAILABLE SINCE v2.31.0
+
 Check if the server instrumentation file exists.
+```js
 instrument: (args: {
 	entrypoint: string;
 	instrumentation: string;
@@ -342,28 +433,36 @@ instrument: (args: {
 				generateText: (args: { instrumentation: string; start: string }) => string;
 		  };
 }) => void;
-options an object containing the following properties:
-options.entrypoint the path to the entrypoint to trace.
-options.instrumentation the path to the instrumentation file.
-options.start the name of the start file. This is what entrypoint will be renamed to.
-options.module configuration for the resulting entrypoint module.
-options.module.generateText a function that receives the relative paths to the instrumentation and start files, and generates the text of the module to be traced. If not provided, the default implementation will be used, which uses top-level await.
-AVAILABLE SINCE v2.31.0
-Instrument entrypoint with instrumentation.
+```
+`options` an object containing the following properties:
+- `options.entrypoint` the path to the entrypoint to trace.
+- `options.instrumentation` the path to the instrumentation file.
+- `options.start` the name of the start file. This is what entrypoint will be renamed to.
+- `options.module` configuration for the resulting entrypoint module.
+- `options.module.generateText` a function that receives the relative paths to the instrumentation and start files, and generates the text of the module to be traced. If not provided, the default implementation will be used, which uses top-level await.
 
-Renames entrypoint to start and creates a new module at entrypoint which imports instrumentation and then dynamically imports start. This allows the module hooks necessary for instrumentation libraries to be loaded prior to any application code.
+AVAILABLE SINCE[dark grey] v2.31.0
+
+Instrument `entrypoint` with `instrumentation`.
+
+Renames `entrypoint` to `start` and creates a new module at `entrypoint` which imports `instrumentation` and then dynamically imports `start`. This allows the module hooks necessary for instrumentation libraries to be loaded prior to any application code.
 
 Caveats:
 
-“Live exports” will not work. If your adapter uses live exports, your users will need to manually import the server instrumentation on startup.
-If tla is false, OTEL auto-instrumentation may not work properly. Use it if your environment supports it.
-Use hasServerInstrumentationFile to check if the user has a server instrumentation file; if they don’t, you shouldn’t do this.
+- “Live exports” will not work. If your adapter uses live exports, your users will need to manually import the server instrumentation on startup.
+- If `tla` is `false`, OTEL auto-instrumentation may not work properly. Use it if your environment supports it.
+- Use `hasServerInstrumentationFile` to check if the user has a server instrumentation file; if they don’t, you shouldn’t do this.
+```js
 compress: (directory: string) => Promise<void>;
-directory The directory containing the files to be compressed
-Compress files in directory with gzip and brotli, where appropriate. Generates .gz and .br files alongside the originals.
-ClientInit
-AVAILABLE SINCE 2.10.0
-The init will be invoked once the app starts in the browser
+```
+`directory` The directory containing the files to be compressed
+Compress files in `directory` with gzip and brotli, where appropriate. Generates `.gz` and `.br` files alongside the originals.
 
+## ClientInit
+:::note
+AVAILABLE SINCE 2.10.0
+:::
+The [`init`](slug:advanced/hooks) will be invoked once the app starts in the browser
+```js
 type ClientInit = () => MaybePromise<void>;
-Config
+```
