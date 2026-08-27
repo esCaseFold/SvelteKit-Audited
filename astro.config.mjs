@@ -11,10 +11,31 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
+					items: [{ autogenerate: { directory: 'guides' } }],
+				},
+				{
+					label: 'Getting Started',
+					items: [{ autogenerate: { directory: 'getting-started' } }],
+				},
+				{
+					label: 'Core concepts',
+					items: [{ autogenerate: { directory: 'core-concepts' } }],
+				},
+				{
+					label: 'Build and Deploy',
+					items: [{ autogenerate: { directory: 'build and deploy' } }],
+				},
+				{
+					label: 'Advanced',
+					items: [{ autogenerate: { directory: 'advanced' } }],
+				},
+				{
+					label: 'Best Practices',
+					items: [{ autogenerate: { directory: 'best-practices' } }],
+				},
+				{
+					label: 'Appendix',
+					items: [{ autogenerate: { directory: 'appendix' } }],
 				},
 				{
 					label: 'Reference',
