@@ -6,24 +6,20 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'SvelteKit Audited',
+			title: 'SvelteKit Docs Audited',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 			sidebar: [
-				{
-					label: 'Guides',
-					items: [{ autogenerate: { directory: 'guides' } }],
-				},
 				{
 					label: 'Getting Started',
 					items: [{ autogenerate: { directory: 'getting-started' } }],
 				},
 				{
-					label: 'Core concepts',
+					label: 'Core Concepts',
 					items: [{ autogenerate: { directory: 'core-concepts' } }],
 				},
 				{
 					label: 'Build and Deploy',
-					items: [{ autogenerate: { directory: 'build and deploy' } }],
+					items: [{ autogenerate: { directory: 'build-and-deploy' } }],
 				},
 				{
 					label: 'Advanced',

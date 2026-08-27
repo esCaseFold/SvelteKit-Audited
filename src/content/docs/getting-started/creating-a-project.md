@@ -1,6 +1,8 @@
 ---
 title: Creating A Project
 description: A guide in my new Starlight docs site.
+sidebar:
+  order: 2
 ---
 
 The easiest way to start building a SvelteKit app is to run :
