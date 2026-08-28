@@ -4,6 +4,81 @@ sidebar:
     order: 1
 ---
 
+//For tooltips
+---
+2
+interface Props {
+3
+text: string;
+4
+}
+5
+ 
+6
+const { text } = Astro.props;
+7
+---
+8
+ 
+9
+<span class="tooltip">
+10
+<slot />
+11
+<span class="tooltip-text">{text}</span>
+12
+</span>
+13
+ 
+14
+<style>
+15
+.tooltip {
+16
+position: relative;
+17
+cursor: help;
+18
+border-bottom: 1px dotted;
+19
+}
+20
+ 
+21
+.tooltip-text {
+22
+visibility: hidden;
+23
+position: absolute;
+24
+bottom: 125%;
+25
+left: 50%;
+26
+transform: translateX(-50%);
+27
+background: #333;
+28
+color: white;
+29
+padding: 8px 12px;
+30
+border-radius: 6px;
+31
+white-space: nowrap;
+32
+}
+33
+ 
+34
+.tooltip:hover .tooltip-text {
+35
+visibility: visible;
+36
+}
+37
+</style>
+
 ```js
 import {
 	Server,
@@ -340,7 +415,9 @@ An array of all routes (including prerendered)
 createEntries: (fn: (route: RouteDefinition) => AdapterEntry) => Promise<void>;
 ```
 [double indent]`fn` A function that groups a set of routes into an entry point
+
 DEPRECATED[greyed out] Use `builder.routes` instead
+
 Create separate functions that map to one or more routes of your app.
 ```js
 findServerAssets: (routes: RouteDefinition[]) => string[];
@@ -455,7 +532,8 @@ Caveats:
 ```js
 compress: (directory: string) => Promise<void>;
 ```
-`directory` The directory containing the files to be compressed
+
+[indent here]`directory` The directory containing the files to be compressed
 Compress files in `directory` with gzip and brotli, where appropriate. Generates `.gz` and `.br` files alongside the originals.
 
 ## ClientInit
