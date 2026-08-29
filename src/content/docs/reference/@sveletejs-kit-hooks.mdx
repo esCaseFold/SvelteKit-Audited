@@ -1,0 +1,148 @@
+---
+title: "@sveltejs/kit/hooks"
+sidebar:
+    order: 3
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+
+```js
+import { defineEnvVars, sequence } from '@sveltejs/kit/hooks';
+```
+## defineEnvVars
+<Aside type="caution" title="Deprecated">
+Import `defineEnvVars` from `@sveltejs/kit/env` instead
+</Aside>
+
+Utility for defining [environment variables](https://svelte.dev/docs/kit/environment-variables), which are made available via `$app/env/public` and `$app/env/private`.
+
+```js
+function defineEnvVars<
+	T extends Record<string, EnvVarConfig<any>>
+>(variables: T): T;
+```
+
+## sequence
+A helper function for sequencing multiple handle calls in a middleware-like manner. The behavior for the handle options is as follows:
+
+- `transformPageChunk` is applied in reverse order and merged
+- `preload` is applied in forward order, the first option “wins” and no `preload` options after it are called
+- `filterSerializedResponseHeaders` behaves the same as `preload`
+
+<Tabs>
+  <TabItem label="javaScript">
+    ```js
+    //src/hooks.server.js
+    import { sequence } from '@sveltejs/kit/hooks';
+
+    /** @type {import('@sveltejs/kit').Handle} */
+    async function first({ event, resolve }) {
+      console.log('first pre-processing');
+      const result = await resolve(event, {
+        transformPageChunk: ({ html }) => {
+          // transforms are applied in reverse order
+          console.log('first transform');
+          return html;
+        },
+        preload: () => {
+          // this one wins as it's the first defined in the chain
+          console.log('first preload');
+          return true;
+        }
+      });
+      console.log('first post-processing');
+      return result;
+    }
+
+    /** @type {import('@sveltejs/kit').Handle} */
+    async function second({ event, resolve }) {
+      console.log('second pre-processing');
+      const result = await resolve(event, {
+        transformPageChunk: ({ html }) => {
+          console.log('second transform');
+          return html;
+        },
+        preload: () => {
+          console.log('second preload');
+          return true;
+        },
+        filterSerializedResponseHeaders: () => {
+          // this one wins as it's the first defined in the chain
+          console.log('second filterSerializedResponseHeaders');
+          return true;
+        }
+      });
+      console.log('second post-processing');
+      return result;
+    }
+
+    export const handle = sequence(first, second);
+    ```
+  </TabItem>
+  <TabItem label="typeScript">
+  ```js
+  //src/hooks.server.ts
+  import { sequence } from '@sveltejs/kit/hooks';
+  import type { Handle } from '@sveltejs/kit';
+
+  const first: Handle = async ({ event, resolve }) => {
+    console.log('first pre-processing');
+    const result = await resolve(event, {
+      transformPageChunk: ({ html }) => {
+        // transforms are applied in reverse order
+        console.log('first transform');
+        return html;
+      },
+      preload: () => {
+        // this one wins as it's the first defined in the chain
+        console.log('first preload');
+        return true;
+      }
+    });
+    console.log('first post-processing');
+    return result;
+  };
+
+  const second: Handle = async ({ event, resolve }) => {
+    console.log('second pre-processing');
+    const result = await resolve(event, {
+      transformPageChunk: ({ html }) => {
+        console.log('second transform');
+        return html;
+      },
+      preload: () => {
+        console.log('second preload');
+        return true;
+      },
+      filterSerializedResponseHeaders: () => {
+        // this one wins as it's the first defined in the chain
+        console.log('second filterSerializedResponseHeaders');
+        return true;
+      }
+    });
+    console.log('second post-processing');
+    return result;
+  };
+
+  export const handle = sequence(first, second);
+  ```
+  </TabItem>
+</Tabs>
+
+
+The example above would print:
+```bash frame="none"
+first pre-processing
+first preload
+second pre-processing
+second filterSerializedResponseHeaders
+second transform
+first transform
+second post-processing
+first post-processing
+```
+
+```js
+function sequence(...handlers: Handle[]): Handle;
+```

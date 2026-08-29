@@ -4,4 +4,6 @@ sidebar:
     order: 2
 --- 
 
-goeldy gook
+## Using Adapters
+
+## Platform-specific Context

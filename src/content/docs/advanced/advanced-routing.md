@@ -3,4 +3,17 @@ title: Advanced Routing
 sidebar:
     order: 1
 ---
-testing the new bs
+
+## Rest parameters
+
+## Optional parameters
+
+## Matching
+
+## Sorting
+
+## Encoding
+
+## Advanced layouts
+
+## Further reading

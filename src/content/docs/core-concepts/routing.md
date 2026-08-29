@@ -3,5 +3,11 @@ title: Routing
 sidebar:
     order: 1
 ----
-
-check three four
+## Routing
+## +page
+## +error
+## +layout
+## +server
+## $types
+## Other files
+## Further reading

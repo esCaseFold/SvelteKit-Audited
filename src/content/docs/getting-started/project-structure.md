@@ -4,5 +4,8 @@ description: A guide in my new Starlight docs site.
 sidebar:
     order: 4
 ---
+## Project Structure
 
-check three
+## Project Files
+
+## Other Files

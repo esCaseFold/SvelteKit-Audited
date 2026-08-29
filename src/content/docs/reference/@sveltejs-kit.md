@@ -469,3 +469,296 @@ The [`init`](slug:advanced/hooks) will be invoked once the app starts in the bro
 ```js
 type ClientInit = () => MaybePromise<void>;
 ```
+
+## Config
+
+
+## Cookies
+
+
+## Emulator
+
+
+## EnvVarConfig
+
+
+## Handle
+
+
+## HandleClientError
+
+
+## HandleFetch
+
+
+## HandleServerError
+
+
+## HandleValidationError
+
+
+## HttpError
+
+
+## InvalidField
+
+
+## KitConfig
+
+
+## LessThan
+
+
+## LiveQueryRequestedResult
+
+
+## LiveRequestedEntry
+
+
+## Load
+
+
+## LoadEvent
+
+
+## LoadProperties
+
+
+## Navigation
+
+
+## NavigationBase
+
+
+## NavigationEnter
+
+
+## NavigationEvent
+
+
+## NavigationExternal
+
+
+## NavigationFormSubmit
+
+
+## NavigationGoto
+
+
+## NavigationLeave
+
+
+## NavigationLink
+
+
+## NavigationPopState
+
+
+## NavigationTarget
+
+
+## NavigationType
+
+
+## NumericRange
+
+
+## OnNavigate
+
+
+## Page
+
+
+## ParamMatcher
+
+
+## PrerenderOption
+
+
+## QueryRequestedResult
+
+
+## Redirect
+
+
+## RemoteCommand
+
+
+## RemoteForm
+
+
+## RemoteFormEnhanceCallback
+
+
+## RemoteFormEnhanceInstance
+
+
+## RemoteFormField
+
+
+## RemoteFormFieldType
+
+
+## RemoteFormFieldValue
+
+
+## RemoteFormFields
+
+
+## RemoteFormInput
+
+
+## RemoteFormIssue
+
+
+## RemoteLiveQuery
+
+
+## RemoteLiveQueryFunction
+
+
+## RemotePrerenderFunction
+
+
+## RemoteQuery
+
+
+## RemoteQueryFunction
+
+
+## RemoteQueryOverride
+
+
+## RemoteQueryUpdate
+
+
+## RemoteResource
+
+
+## RequestEvent
+
+
+## RequestHandler
+
+
+## RequestedEntry
+
+
+## RequestedResult
+
+
+## Reroute
+
+
+## ResolveOptions
+
+
+## RouteDefinition
+
+
+##SSRManifest
+
+
+## ServerInit
+
+
+## ServerInitOptions
+
+
+## ServerLoad
+
+
+## ServerLoadEvent
+
+
+## Snapshot
+
+
+## SubmitFunction
+
+
+## Transport
+
+
+## Transporter
+
+
+## ValidationError
+
+
+## Private types
+
+
+## AdapterEntry
+
+
+## Csp
+
+
+## CspDirectives
+
+
+## DeepPartial
+
+
+## HasNonOptionalBoolean
+
+
+## HttpMethod
+
+
+## IsAny
+
+
+## Logger
+
+
+## MaybePromise
+
+
+## PrerenderEntryGeneratorMismatchHandler
+
+
+## PrerenderEntryGeneratorMismatchHandlerValue
+
+
+## PrerenderHttpErrorHandler
+
+
+## PrerenderHttpErrorHandlerValue
+
+
+## PrerenderInvalidUrlHandler
+
+
+## PrerenderInvalidUrlHandlerValue
+
+
+## PrerenderMap
+
+
+## PrerenderMissingIdHandler
+
+
+## PrerenderMissingIdHandlerValue
+
+
+## PrerenderOption
+
+
+## PrerenderUnseenRoutesHandler
+
+
+## PrerenderUnseenRoutesHandlerValue
+
+
+## Prerendered
+
+
+## RequestOptions
+
+
+## RouteSegment
+
+
+## TrailingSlash
