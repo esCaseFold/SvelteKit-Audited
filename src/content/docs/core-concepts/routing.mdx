@@ -184,8 +184,78 @@ We can create a layout that only applies to pages below `/settings` (while inher
 </details>
 
 ### +layout.js
+Just like `+page.svelte` loading data from `+page.js`, your `+layout.svelte` component can get data from a [`load`](/core-concepts/loading-data/) function in `+layout.js`.
+
+<Tabs syncKey="languages">
+  <TabItem label="JavaScript" icon="seti:javascript">
+    ```js
+    //src/routes/settings/+layout.js
+    /** @type {import('./$types').LayoutLoad} */
+    export function load() {
+        return {
+            sections: [
+                { slug: 'profile', title: 'Profile' },
+                { slug: 'notifications', title: 'Notifications' }
+            ]
+        };
+    }
+    ```
+  </TabItem>
+  <TabItem label="TypeScript" icon="seti:tsconfig">
+    ```js
+    //src/routes/settings/+layout.ts
+    import type { LayoutLoad } from './$types';
+
+    export const load: LayoutLoad = () => {
+        return {
+            sections: [
+                { slug: 'profile', title: 'Profile' },
+                { slug: 'notifications', title: 'Notifications' }
+            ]
+        };
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+If a `+layout.js` exports [page options](/core-concepts/page-options/) — `prerender`, `ssr` and `csr` — they will be used as defaults for child pages.
+
+Data returned from a layout’s `load` function is also available to all its child pages:
+
+<Tabs syncKey="languages">
+  <TabItem label="JavaScript" icon="seti:javascript">
+    ```js
+    //src/routes/settings/profile/+page.svelte
+    <script>
+        /** @type {import('./$types').PageProps} */
+        let { data } = $props();
+
+        console.log(data.sections); // [{ slug: 'profile', title: 'Profile' }, ...]
+    </script>
+    ```
+  </TabItem>
+  <TabItem label="TypeScript" icon="seti:tsconfig">
+    ```js
+    //src/routes/settings/profile/+page.svelte
+    <script lang="ts">
+        import type { PageProps } from './$types';
+
+        let { data }: PageProps = $props();
+
+        console.log(data.sections); // [{ slug: 'profile', title: 'Profile' }, ...]
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+:::note
+Often, layout data is unchanged when navigating between pages. SvelteKit will intelligently rerun [`load`](/core-concepts/loading-data/) functions when necessary.
+:::
 
 ### +layout.server.js
+To run your layout’s `load` function on the server, move it to `+layout.server.js`, and change the `LayoutLoad` type to `LayoutServerLoad`.
+
+Like `+layout.js`, `+layout.server.js` can export [page options](/core-concepts/page-options/) — `prerender`, `ssr` and `csr`.
 
 ## +server
 As well as pages, you can define routes with a `+server.js` file (sometimes referred to as an ‘API route’ or an ‘endpoint’), which gives you full control over the response. Your `+server.js` file exports functions corresponding to HTTP verbs like `GET`, `POST`, `PATCH`, `PUT`, `DELETE`, `OPTIONS`, and `HEAD` that take a [`RequestEvent`](/reference/sveltejs-kit/#requestevent) argument and return a [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object.
