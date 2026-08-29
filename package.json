@@ -15,6 +15,7 @@
     "sharp": "^0.35.3"
   },
   "allowScripts": {
-    "esbuild": true
+    "esbuild": true,
+    "fsevents@2.3.3": true
   }
 }

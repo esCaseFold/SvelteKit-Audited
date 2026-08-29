@@ -4,7 +4,8 @@ description: A guide in my new Starlight docs site.
 sidebar:
     order: 1
 ---
-:::note[Before we begin]
+## Before We Begin
+:::tip
 If you’re new to Svelte or SvelteKit we recommend checking out the [interactive tutorial](https://svelte.dev/tutorial/kit/introducing-sveltekit).
 
 If you get stuck, reach out for help in the [Discord chatroom](https://svelte.dev/chat).
