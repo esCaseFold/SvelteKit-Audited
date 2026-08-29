@@ -31,7 +31,7 @@ A helper function for sequencing multiple handle calls in a middleware-like mann
 - `filterSerializedResponseHeaders` behaves the same as `preload`
 
 <Tabs>
-  <TabItem label="javaScript">
+  <TabItem label="JavaScript" icon="seti:javascript">
     ```js
     //src/hooks.server.js
     import { sequence } from '@sveltejs/kit/hooks';
@@ -80,7 +80,7 @@ A helper function for sequencing multiple handle calls in a middleware-like mann
     export const handle = sequence(first, second);
     ```
   </TabItem>
-  <TabItem label="typeScript">
+  <TabItem label="TypeScript" icon="seti:tsconfig">
   ```js
   //src/hooks.server.ts
   import { sequence } from '@sveltejs/kit/hooks';
