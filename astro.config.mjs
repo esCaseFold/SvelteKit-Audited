@@ -39,7 +39,7 @@ export default defineConfig({
 				},
 			],
 			components: {
-    			Header: './src/components/FontToggle.astro',
+    			Header: './src/components/CustomHeader.astro',
 			},
 			customCss: [
 				'./src/styles/custom.css'

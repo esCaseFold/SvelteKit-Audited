@@ -2,15 +2,10 @@
   --doc-font: Inter, sans-serif;
 }
 
-:root[data-font="serif"] {
-  --doc-font: Georgia, "Times New Roman", serif;
+:root[data-font="serif"] body {
+  font-family: Georgia, "Times New Roman", serif;
 }
 
-:root[data-font="sans"] {
-  --doc-font: Inter, sans-serif;
-}
-
-/* Documentation content */
-.sl-markdown-content {
-  font-family: var(--doc-font);
+:root[data-font="sans"] body {
+  font-family: Inter, sans-serif;
 }

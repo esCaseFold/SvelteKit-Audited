@@ -45,6 +45,15 @@ Throws an error with a HTTP status code and an optional message. When called dur
 
 ## error
 Throws an error with a HTTP status code and an optional message. When called during request handling, this will cause SvelteKit to return an error response without invoking `handleError`. Make sure you’re not catching the thrown error, which would prevent SvelteKit from handling it.
+
+@param `status` The HTTP status code. Must be in the range 400-599.
+
+@param `body` An object that conforms to the App.Error type. If a string is passed, it will be used as the message property.
+
+@throws `HttpError` This error instructs SvelteKit to initiate HTTP error handling.
+
+@throws `Error` If the provided status is invalid (not between 400 and 599).
+
 ```js
 function error(status: number, body: App.Error): never;
 ```

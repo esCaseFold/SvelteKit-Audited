@@ -4,22 +4,25 @@ type Props = {
 };
 
 const { font }: Props = Astro.props;
+import { Icon } from '@astrojs/starlight/components';
 ---
 <button id="font-toggle" type="button">
-  Sans Serif
+  <Icon name="seti:font" size="1rem" />
+  <span class="label">Serif</span>
 </button>
 
 <script>
   const root = document.documentElement;
   const button = document.getElementById('font-toggle') as HTMLButtonElement | null;
+  const label = document.querySelector('#font-toggle .label');
 
   function setFont(font: string) {
     console.log(font);
     root.dataset.font = font;
     localStorage.setItem('font-preference', font);
 
-    if (button) {
-      button.textContent = font === 'serif' ? 'Serif' : 'Sans Serif';
+    if (label) {
+      label.textContent = font === 'serif' ? '  Sans Serif' : '  Serif';
     }
   }
 
