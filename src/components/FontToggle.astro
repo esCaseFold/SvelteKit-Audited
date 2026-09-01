@@ -1,0 +1,48 @@
+---
+type Props = {
+  font: string;
+};
+
+const { font }: Props = Astro.props;
+---
+<button id="font-toggle" type="button">
+  Sans Serif
+</button>
+
+<script>
+  const root = document.documentElement;
+  const button = document.getElementById('font-toggle') as HTMLButtonElement | null;
+
+  function setFont(font: string) {
+    console.log(font);
+    root.dataset.font = font;
+    localStorage.setItem('font-preference', font);
+
+    if (button) {
+      button.textContent = font === 'serif' ? 'Serif' : 'Sans Serif';
+    }
+  }
+
+  setFont(
+    localStorage.getItem('font-preference') || 'sans'
+  );
+
+  button?.addEventListener('click', () => {
+    const next =
+      root.dataset.font === 'sans'
+        ? 'serif'
+        : 'sans';
+
+    setFont(next);
+  });
+</script>
+
+<style>
+  button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-bg);
+    cursor: pointer;
+  }
+</style>

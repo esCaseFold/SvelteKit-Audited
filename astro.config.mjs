@@ -38,6 +38,12 @@ export default defineConfig({
 					items: [{ autogenerate: { directory: 'reference' } }],
 				},
 			],
+			components: {
+    			Header: './src/components/FontToggle.astro',
+			},
+			customCss: [
+				'./src/styles/custom.css'
+			],
 		}),
 	],
 });

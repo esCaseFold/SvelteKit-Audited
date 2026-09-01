@@ -1,0 +1,16 @@
+:root {
+  --doc-font: Inter, sans-serif;
+}
+
+:root[data-font="serif"] {
+  --doc-font: Georgia, "Times New Roman", serif;
+}
+
+:root[data-font="sans"] {
+  --doc-font: Inter, sans-serif;
+}
+
+/* Documentation content */
+.sl-markdown-content {
+  font-family: var(--doc-font);
+}
