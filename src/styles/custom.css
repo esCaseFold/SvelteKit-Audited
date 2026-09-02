@@ -2,10 +2,39 @@
   --doc-font: Inter, sans-serif;
 }
 
-:root[data-font="serif"] body {
-  font-family: Georgia, "Times New Roman", serif;
+:root[data-font="serif"] {
+  --content-font: Georgia, "Times New Roman", serif;
 }
 
-:root[data-font="sans"] body {
-  font-family: Inter, sans-serif;
+:root[data-font="sans"] {
+  --content-font: Inter, sans-serif;
+}
+
+/* Documentation page content */
+.sl-markdown-content {
+  font-family: var(--content-font);
+}
+
+/* Sidebar navigation */
+.sidebar-content,
+.sidebar-content * {
+  font-family: var(--content-font);
+}
+
+/* "On this page" navigation */
+.right-sidebar,
+.right-sidebar * {
+  font-family: var(--content-font);
+}
+
+/* Previous / Next page cards */
+.pagination-links,
+.pagination-links * {
+  font-family: var(--content-font);
+}
+
+/* Search results */
+.sl-search,
+.sl-search * {
+  font-family: var(--content-font);
 }

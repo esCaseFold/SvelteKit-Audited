@@ -1,10 +1,20 @@
 ---
 import Header from '@astrojs/starlight/components/Header.astro';
 import FontToggle from './FontToggle.astro';
+// I can't figure out how to get the FontToggle component to show up in the header, so I just put it in a div and positioned it with absolute positioning. I think this is a hacky solution, but it works for now.
 ---
 
-<Header>
-  <Fragment slot="right">
-    <font-toggle />
-  </Fragment>
-</Header>
+<div style="position: relative;">
+  <Header />
+  <div
+    style="
+      position:absolute;
+      top:50%;
+      right:10%;
+      transform:translateY(-50%);
+      z-index:50;
+    "
+  >
+    <FontToggle />
+  </div>
+</div>

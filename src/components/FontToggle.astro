@@ -1,11 +1,7 @@
 ---
-type Props = {
-  font: string;
-};
-
-const { font }: Props = Astro.props;
 import { Icon } from '@astrojs/starlight/components';
 ---
+
 <button id="font-toggle" type="button">
   <Icon name="seti:font" size="1rem" />
   <span class="label">Serif</span>
