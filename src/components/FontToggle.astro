@@ -18,7 +18,10 @@ import { Icon } from '@astrojs/starlight/components';
     localStorage.setItem('font-preference', font);
 
     if (label) {
-      label.textContent = font === 'serif' ? '  Sans Serif' : '  Serif';
+      label.textContent = 
+        font === 'serif'
+          ? ' Sans Serif'
+          : ' Serif';
     }
   }
 

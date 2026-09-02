@@ -7,7 +7,11 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'SvelteKit Docs Audited',
+			favicon: './svelte-logo.png',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+      		logo: {
+        		src: './src/assets/svelte-logo.png',
+      		},
 			sidebar: [
 				{
 					label: 'Getting Started',
