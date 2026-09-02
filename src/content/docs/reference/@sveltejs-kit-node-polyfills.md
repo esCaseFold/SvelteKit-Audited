@@ -2,6 +2,7 @@
 title: "@sveltejs/node/polyfills"
 sidebar:
     order: 4
+slug: reference/@sveltejs-kit-node-polyfills
 ---
 ```js
 import { installPolyfills } from '@sveltejs/kit/node/polyfills';

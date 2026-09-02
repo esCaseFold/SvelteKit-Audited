@@ -2,6 +2,7 @@
 title: "@sveltejs/kit"
 sidebar:
     order: 1
+slug: reference/@sveltejs-kit
 ---
 
 ```js
@@ -46,17 +47,16 @@ Throws an error with a HTTP status code and an optional message. When called dur
 ## error
 Throws an error with a HTTP status code and an optional message. When called during request handling, this will cause SvelteKit to return an error response without invoking `handleError`. Make sure you’re not catching the thrown error, which would prevent SvelteKit from handling it.
 
-@param `status` The HTTP status code. Must be in the range 400-599.
-
-@param `body` An object that conforms to the App.Error type. If a string is passed, it will be used as the message property.
-
-@throws `HttpError` This error instructs SvelteKit to initiate HTTP error handling.
-
-@throws `Error` If the provided status is invalid (not between 400 and 599).
-
 ```js
 function error(status: number, body: App.Error): never;
 ```
+- @param `status` The HTTP status code. Must be in the range 400-599.
+
+- @param `body` An object that conforms to the App.Error type. If a string is passed, it will be used as the message property.
+
+- @throws `HttpError` This error instructs SvelteKit to initiate HTTP error handling.
+
+- @throws `Error` If the provided status is invalid (not between 400 and 599).
 ```js
 function error(
 	status: number,
@@ -72,6 +72,7 @@ Create an `ActionFailure` object. Call when form submission fails.
 ```js
 function fail(status: number): ActionFailure<undefined>;
 ```
+- @param status [The HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses). Must be in the range 400-599.
 ```js
 function fail<T = undefined>(
 	status: number,
@@ -480,16 +481,120 @@ type ClientInit = () => MaybePromise<void>;
 ```
 
 ## Config
-
+See the [configuration](https://svelte.dev/docs/kit/configuration) reference for details.
 
 ## Cookies
+```js
+interface Cookies {…}
+```
+```js
+get: (name: string, opts?: import('cookie').CookieParseOptions) => string | undefined;
+```
+`name` the name of the cookie
+
+`opts` the options, passed directly to `cookie.parse`. See documentation [here](https://github.com/jshttp/cookie#cookieparsestr-options)
+
+Gets a cookie that was previously set with `cookies.set`, or from the request headers.
+```js
+getAll: (opts?: import('cookie').CookieParseOptions) => Array<{ name: string; value: string }>;
+```
+`opts` the options, passed directly to `cookie.parse`. See documentation [here](https://github.com/jshttp/cookie#cookieparsestr-options)
+
+Gets all cookies that were previously set with `cookies.set`, or from the request headers.
+```js
+set: (
+	name: string,
+	value: string,
+	opts: import('cookie').CookieSerializeOptions & { path: string }
+) => void;
+```
+`name` the name of the cookie
+
+`value` the cookie value
+
+`opts` the options, passed directly to `cookie.serialize`. See documentation [here](https://github.com/jshttp/cookie#cookieserializename-value-options)
+
+Sets a cookie. This will add a `set-cookie` header to the response, but also make the cookie available via cookies.get or `cookies.getAll` during the current request.
+
+The `httpOnly` and `secure` options are true by default (except on http://localhost, where `secure` is `false`), and must be explicitly disabled if you want cookies to be readable by client-side JavaScript and/or transmitted over HTTP. The `sameSite` option defaults to `lax`.
+
+You must specify a `path` for the cookie. In most cases you should explicitly set `path: '/'` to make the cookie available throughout your app. You can use relative paths, or set `path: ''` to make the cookie only available on the current path and its children
+```js
+delete: (name: string, opts: import('cookie').CookieSerializeOptions & { path: string }) => void;
+```
+`name` the name of the cookie
+
+`opts` the options, passed directly to `cookie.serialize`. The path must match the path of the cookie you want to delete. See documentation [here](https://github.com/jshttp/cookie#cookieserializename-value-options)
+
+Deletes a cookie by setting its value to an empty string and setting the expiry date in the past.
+
+You must specify a `path` for the cookie. In most cases you should explicitly set `path: '/'` to make the cookie available throughout your app. You can use relative paths, or set `path: ''` to make the cookie only available on the current path and its children
+```js
+serialize: (
+	name: string,
+	value: string,
+	opts: import('cookie').CookieSerializeOptions & { path: string }
+) => string;
+```
+`name` the name of the cookie
+
+`value` the cookie value
+
+`opts` the options, passed directly to `cookie.serialize`. See documentation [here](https://github.com/jshttp/cookie#cookieserializename-value-options)
+
+Serialize a cookie name-value pair into a `Set-Cookie` header string, but don’t apply it to the response.
+
+The `httpOnly` and `secure` options are true by default (except on http://localhost, where `secure` is `false`), and must be explicitly disabled if you want cookies to be readable by client-side JavaScript and/or transmitted over HTTP. The `sameSite` option defaults to `lax`.
+
+You must specify a `path` for the cookie. In most cases you should explicitly set `path: '/'` to make the cookie available throughout your app. You can use relative paths, or set `path: ''` to make the cookie only available on the current path and its children
 
 
 ## Emulator
-
+A collection of functions that influence the environment during dev, build and prerendering
+```js
+interface Emulator {…}
+```
+```js
+platform?(details: { config: any; prerender: PrerenderOption }): MaybePromise<App.Platform>;
+```
+A function that is called with the current route config and prerender option and returns an App.Platform object
 
 ## EnvVarConfig
+[Environment variables](https://svelte.dev/docs/kit/environment-variables) can be configured by exporting a `variables` object from `src/env.ts`, using [`defineEnvVars`](/reference/sveltejs-kit-env/#defineenvvars).
 
+```js
+interface EnvVarConfig<T> {…}
+```
+```js
+public?: boolean;
+```
+DEFAULT false
+
+Whether the environment variable can be accessed by client-side code.
+
+- if true, it can be imported from `$app/env/public`
+- if false, it can be imported from `$app/env/private`, which is a [server-only module](https://svelte.dev/docs/kit/server-only-modules)
+
+```js
+static?: boolean;
+````
+
+DEFAULT false
+
+Whether the value is determined at build time or when the app runs.
+
+- if `true`, the build time value is inlined into the bundle. This enables optimisations like dead-code elimination
+- if `false`, the value is read from the environment when the app starts
+
+```js
+schema?: StandardSchemaV1<string | undefined, T>;
+```
+
+A Standard Schema validator that is applied to the value when the app starts. The validator can output any value — not necessarily a string — but public, non-static values must be serializable by devalue so that they can be sent to the browser.
+
+If omitted, the value must be a non-empty string.
+description?: string;
+A description of the variable that will be used for inline documentation on hover.
 
 ## Handle
 

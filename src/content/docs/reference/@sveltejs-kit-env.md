@@ -2,6 +2,7 @@
 title: "@sveltejs/kit/env"
 sidebar:
     order: 2
+slug: reference/@sveltejs-kit-env
 ---
 ```js
 import { defineEnvVars } from '@sveltejs/kit/env';

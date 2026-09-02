@@ -2,6 +2,7 @@
 title: Node Servers
 sidebar:
     order: 4
+slug: build-and-deploy/adapter-node
 ---
 
 ## Usage

@@ -2,6 +2,7 @@
 title: Breakpoint Debugging
 sidebar:
     order: 3
+slug: appendix/debugging
 ---
 
 ## Visual Studio Code
