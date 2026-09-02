@@ -1,11 +1,14 @@
 ---
 import { Icon } from '@astrojs/starlight/components';
+const isHomePage = Astro.url.pathname === '/';
 ---
 
-<button id="font-toggle" type="button">
-  <Icon name="seti:font" size="1rem" />
-  <span class="label">Serif</span>
-</button>
+{!isHomePage && (
+  <button id="font-toggle" type="button">
+    <Icon name="seti:font" size="1rem" />
+    <span class="label">Serif</span>
+  </button>
+)}
 
 <script>
   const root = document.documentElement;
@@ -16,6 +19,13 @@ import { Icon } from '@astrojs/starlight/components';
     console.log(font);
     root.dataset.font = font;
     localStorage.setItem('font-preference', font);
+
+  if (button) {
+    button.style.fontFamily =
+      font === 'serif'
+        ? 'system-ui, sans-serif'
+        : 'Georgia, serif';
+  }
 
     if (label) {
       label.textContent = 
