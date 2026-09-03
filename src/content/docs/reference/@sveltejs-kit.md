@@ -598,281 +598,256 @@ A description of the variable that will be used for inline documentation on hove
 
 ## Handle
 
+The [`handle`](/advanced/hooks#handle) hook runs every time the SvelteKit server receives a [request](/getting-started/web-standards#request) and
+determines the [response](/getting-started/web-standards#response).
+It receives an `event` object representing the request and a function called `resolve`, which renders the route and generates a `Response`.
+This allows you to modify response headers or bodies, or bypass SvelteKit entirely (for implementing routes programmatically, for example).
+
+
+```js
+type Handle = (input: {
+	event: RequestEvent;
+	resolve: (
+		event: RequestEvent,
+		opts?: ResolveOptions
+	) => MaybePromise<Response>;
+}) => MaybePromise<Response>;
+```
 
 ## HandleClientError
 
+The client-side [`handleError`](/advanced/hooks#handleError) hook runs when an unexpected error is thrown while navigating.
+
+If an unexpected error is thrown during loading or the following render, this function will be called with the error and the event.
+Make sure that this function *never* throws an error.
+
+```js
+type HandleClientError = (input: {
+	error: unknown;
+	event: NavigationEvent;
+	status: number;
+	message: string;
+}) => MaybePromise<void | App.Error>;
+```
 
 ## HandleFetch
 
+The [`handleFetch`](/advanced/hooks#handleFetch) hook allows you to modify (or replace) the result of an [`event.fetch`](/core-concept/loading-data#making-fetch-requests) call that runs on the server (or during prerendering) inside an endpoint, `load`, `action`, `handle`, `handleError` or `reroute`.
+
+```js
+type HandleFetch = (input: {
+	event: RequestEvent;
+	request: Request;
+	fetch: typeof fetch;
+}) => MaybePromise<Response>;
+```
 
 ## HandleServerError
 
+The server-side [`handleError`](/advanced/hooks#handleError) hook runs when an unexpected error is thrown while responding to a request.
+
+If an unexpected error is thrown during loading or rendering, this function will be called with the error and the event.
+Make sure that this function _never_ throws an error.
+
+```js
+type HandleServerError = (input: {
+	error: unknown;
+	event: RequestEvent;
+	status: number;
+	message: string;
+}) => MaybePromise<void | App.Error>;
+```
 
 ## HandleValidationError
 
+The [`handleValidationError`](/advanced/hooks#handleValidationError) hook runs when the argument to a remote function fails validation.
+
+It will be called with the validation issues and the event, and must return an object shape that matches `App.Error`.
+
+```js
+type HandleValidationError<
+	Issue extends StandardSchemaV1.Issue =
+		StandardSchemaV1.Issue
+> = (input: {
+	issues: Issue[];
+	event: RequestEvent;
+}) => MaybePromise<App.Error>;
+```
 
 ## HttpError
 
-
 ## InvalidField
-
 
 ## KitConfig
 
-
 ## LessThan
-
 
 ## LiveQueryRequestedResult
 
-
 ## LiveRequestedEntry
-
 
 ## Load
 
-
 ## LoadEvent
-
 
 ## LoadProperties
 
-
 ## Navigation
-
 
 ## NavigationBase
 
-
 ## NavigationEnter
-
 
 ## NavigationEvent
 
-
 ## NavigationExternal
-
 
 ## NavigationFormSubmit
 
-
 ## NavigationGoto
-
 
 ## NavigationLeave
 
-
 ## NavigationLink
-
 
 ## NavigationPopState
 
-
 ## NavigationTarget
-
 
 ## NavigationType
 
-
 ## NumericRange
-
 
 ## OnNavigate
 
-
 ## Page
-
 
 ## ParamMatcher
 
-
 ## PrerenderOption
-
 
 ## QueryRequestedResult
 
-
 ## Redirect
-
 
 ## RemoteCommand
 
-
 ## RemoteForm
-
 
 ## RemoteFormEnhanceCallback
 
-
 ## RemoteFormEnhanceInstance
-
 
 ## RemoteFormField
 
-
 ## RemoteFormFieldType
-
 
 ## RemoteFormFieldValue
 
-
 ## RemoteFormFields
-
 
 ## RemoteFormInput
 
-
 ## RemoteFormIssue
-
 
 ## RemoteLiveQuery
 
-
 ## RemoteLiveQueryFunction
-
 
 ## RemotePrerenderFunction
 
-
 ## RemoteQuery
-
 
 ## RemoteQueryFunction
 
-
 ## RemoteQueryOverride
-
 
 ## RemoteQueryUpdate
 
-
 ## RemoteResource
-
 
 ## RequestEvent
 
-
 ## RequestHandler
-
 
 ## RequestedEntry
 
-
 ## RequestedResult
-
 
 ## Reroute
 
-
 ## ResolveOptions
-
 
 ## RouteDefinition
 
-
-##SSRManifest
-
+## SSRManifest
 
 ## ServerInit
 
-
 ## ServerInitOptions
-
 
 ## ServerLoad
 
-
 ## ServerLoadEvent
-
 
 ## Snapshot
 
-
 ## SubmitFunction
-
 
 ## Transport
 
-
 ## Transporter
-
 
 ## ValidationError
 
-
 ## Private types
-
 
 ## AdapterEntry
 
-
 ## Csp
-
 
 ## CspDirectives
 
-
 ## DeepPartial
-
 
 ## HasNonOptionalBoolean
 
-
 ## HttpMethod
-
 
 ## IsAny
 
-
 ## Logger
-
 
 ## MaybePromise
 
-
 ## PrerenderEntryGeneratorMismatchHandler
-
 
 ## PrerenderEntryGeneratorMismatchHandlerValue
 
-
 ## PrerenderHttpErrorHandler
-
 
 ## PrerenderHttpErrorHandlerValue
 
-
 ## PrerenderInvalidUrlHandler
-
 
 ## PrerenderInvalidUrlHandlerValue
 
-
 ## PrerenderMap
-
 
 ## PrerenderMissingIdHandler
 
-
 ## PrerenderMissingIdHandlerValue
-
 
 ## PrerenderOption
 
-
 ## PrerenderUnseenRoutesHandler
-
 
 ## PrerenderUnseenRoutesHandlerValue
 
-
 ## Prerendered
-
 
 ## RequestOptions
 
-
 ## RouteSegment
-
 
 ## TrailingSlash
