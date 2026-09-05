@@ -106,7 +106,7 @@ In Sapper, all relative URLs were resolved against the base URL — usually `/`,
 
 This caused problems and is no longer the case in SvelteKit. Instead, relative URLs are resolved against the current page (or the destination page, for `fetch` URLs in `load` functions) instead. In most cases, it’s easier to use root-relative (i.e. starts with `/`) URLs, since their meaning is not context-dependent.
 
-### `<a>` attributes [look at this again]
+### `<a>` attributes
 - `sapper:prefetch` is now `data-sveltekit-preload-data`
 - `sapper:noscroll` is now `data-sveltekit-noscroll`
 
