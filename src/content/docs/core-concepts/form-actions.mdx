@@ -13,7 +13,7 @@ When using `<form>`, client-side JavaScript is optional, but you can easily _pro
 :::note
 The experimental [`form` remote function](https://svelte.dev/docs/kit/remote-functions#form) covers the same use cases as form actions, adding type safety and [single-flight mutations](https://svelte.dev/docs/kit/remote-functions#Single-flight-mutations). Form actions are feature-complete and will continue to work, but new development is focused on remote functions, which are intended to become the recommended way to communicate with the server. Consider remote functions for new projects, keeping in mind that the API may change while the feature is experimental.
 :::
-## Default actions
+## Default Actions
 
 In the simplest case, a page declares a `default` action:
 
@@ -75,7 +75,7 @@ We can also invoke the action from other pages (for example if there's a login w
 </form>
 ```
 
-## Named actions
+## Named Actions
 
 Instead of one `default` action, a page can have as many named actions as it needs:
 
@@ -148,7 +148,7 @@ As well as the `action` attribute, we can use the `formaction` attribute on a bu
 We can't have default actions next to named actions, because if you `POST` to a named action without a redirect, the query parameter is persisted in the URL, which means the next default `POST` would go through the named action from before.
 :::
 
-## Anatomy of an action
+## Anatomy of an Action
 
 Each action receives a `RequestEvent` object, allowing you to read the data with `request.formData()`. After processing the request (for example, logging the user in by setting a cookie), the action can respond with data that will be available through the `form` property on the corresponding page and through `page.form` app-wide until the next update.
 
@@ -271,7 +271,7 @@ In Svelte 4, you'd use `export let data` and `export let form` instead to declar
 </details>
 
 
-### Validation errors
+### Validation Errors
 
 If the request couldn't be processed because of invalid data, you can return validation errors — along with the previously submitted form values — back to the user so that they can try again. The `fail` function lets you return an HTTP status code (typically 400 or 422, in the case of validation errors) along with the data. The status code is available through `page.status` and the data through `form`:
 
@@ -446,7 +446,7 @@ Redirects (and errors) work exactly the same as in [`load`](/core-concepts/loadi
   </TabItem>
 </Tabs>
 
-## Loading data
+## Loading Data
 
 After an action runs, the page will be re-rendered (unless a redirect or an unexpected error occurs), with the action's return value available to the page as the `form` prop. This means that your page's `load` functions will run after the action completes.
 
@@ -518,7 +518,7 @@ Note that `handle` runs before the action is invoked, and does not rerun before 
   </TabItem>
 </Tabs>
 
-## Progressive enhancement
+## Progressive Enhancement
 
 In the preceding sections we built a `/login` action that [works without client-side JavaScript](https://kryogenix.org/code/browser/everyonehasjs.html) — not a `fetch` in sight. That's great, but when JavaScript _is_ available we can progressively enhance our form interactions to provide a better user experience.
 
@@ -558,7 +558,7 @@ The easiest way to progressively enhance a form is to add the `use:enhance` acti
 `use:enhance` can only be used with forms that have `method="POST"` and point to actions defined in a `+page.server.js` file. It will not work with `method="GET"`, which is the default for forms without a specified method. Attempting to use `use:enhance` on forms without `method="POST"` or posting to a `+server.js` endpoint will result in an error.
 :::
 
-:::tip
+:::tip[Comment]{icon="comment"} 
 Yes, it's a little confusing that the `enhance` action and `<form action>` are both called 'action'. These docs are action-packed. Sorry.
 :::
 
@@ -656,7 +656,7 @@ The behaviour of `applyAction(result)` depends on `result.type`:
 
 In all cases, [focus will be reset](https://svelte.dev/docs/kit/accessibility#Focus-management).
 
-### Custom event listener
+### Custom Event Listener
 
 We can also implement progressive enhancement ourselves, without `use:enhance`, with a normal event listener on the `<form>`:
 
@@ -823,6 +823,6 @@ Some forms don't need to `POST` data to the server — search inputs, for exampl
 
 Submitting this form will navigate to `/search?q=...` and invoke your load function but will not invoke an action. As with `<a>` elements, you can set the [`data-sveltekit-reload`](/advanced/link-options/#data-sveltekit-reload), [`data-sveltekit-replacestate`](/advanced/link-options/#data-sveltekit-replacestate), [`data-sveltekit-keepfocus`](/advanced/link-options/#data-sveltekit-keepfocus) and [`data-sveltekit-noscroll`](/advanced/link-options/#data-sveltekit-noscroll) attributes on the `<form>` to control the router's behaviour.
 
-## Further reading
+## Further Reading
 
 - [Tutorial: Forms](https://svelte.dev/tutorial/kit/the-form-element)

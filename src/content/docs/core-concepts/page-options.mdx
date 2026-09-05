@@ -41,7 +41,7 @@ The prerenderer will start at the root of your app and generate files for any pr
 
 While prerendering, the value of `building` imported from [`$app/environment`]($app-environment) will be `true`.
 
-### Prerendering server routes
+### Prerendering Server Routes
 
 Unlike the other page options, `prerender` also applies to `+server.js` files. These files are _not_ affected by layouts, but will inherit default values from the pages that fetch data from them, if any. For example if a `+page.js` contains this `load` function...
 
@@ -58,11 +58,13 @@ export async function load({ fetch }) {
 
 ...then `src/routes/my-server-route.json/+server.js` will be treated as prerenderable if it doesn't contain its own `export const prerender = false`.
 
-### When not to prerender
+### When not to Prerender
 
 The basic rule is this: for a page to be prerenderable, any two users hitting it directly must get the same content from the server.
 
-> [!NOTE] Not all pages are suitable for prerendering. Any content that is prerendered will be seen by all users. You can of course fetch personalized data in `onMount` in a prerendered page, but this may result in a poorer user experience since it will involve blank initial content or loading indicators.
+:::note
+Not all pages are suitable for prerendering. Any content that is prerendered will be seen by all users. You can of course fetch personalized data in `onMount` in a prerendered page, but this may result in a poorer user experience since it will involve blank initial content or loading indicators.
+:::
 
 Note that you can still prerender pages that load data based on the page's parameters, such as a `src/routes/blog/[slug]/+page.svelte` route.
 
@@ -70,7 +72,7 @@ Accessing [`url.searchParams`](load#Using-URL-data-url) during prerendering is f
 
 Pages with [actions](form-actions) cannot be prerendered, because a server must be able to handle the action `POST` requests.
 
-### Route conflicts
+### Route Conflicts
 
 Because prerendering writes to the filesystem, it isn't possible to have two endpoints that would cause a directory and a file to have the same name. For example, `src/routes/foo/+server.js` and `src/routes/foo/bar/+server.js` would try to create `foo` and `foo/bar`, which is impossible.
 
@@ -225,6 +227,6 @@ export const config = {
 
 ...which results in the config value `{ runtime: 'edge', regions: ['us1', 'us2'], foo: { baz: true } }` for that page.
 
-## Further reading
+## Further Reading
 
 - [Tutorial: Page options](https://svelte.dev/tutorial/kit/page-options)

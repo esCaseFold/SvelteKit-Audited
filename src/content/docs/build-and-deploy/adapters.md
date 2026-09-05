@@ -15,7 +15,7 @@ Official adapters exist for a variety of platforms — these are documented on t
 
 Additional [community-provided adapters](https://svelte.dev/packages#sveltekit-adapters) exist for other platforms.
 
-## Using adapters
+## Using Adapters
 
 Your adapter is specified in `svelte.config.js`:
 
@@ -35,6 +35,6 @@ const config = {
 export default config;
 ```
 
-## Platform-specific context
+## Platform-specific Context
 
-Some adapters may have access to additional information about the request. For example, Cloudflare Workers can access an `env` object containing KV namespaces etc. This can be passed to the `RequestEvent` used in [hooks](advanced/hooks/) and [server routes](/core-concepts/routing/#server) as the `platform` property — consult each adapter's documentation to learn more.
+Some adapters may have access to additional information about the request. For example, Cloudflare Workers can access an `env` object containing KV namespaces etc. This can be passed to the `RequestEvent` used in [hooks](/advanced/hooks/) and [server routes](/core-concepts/routing#server) as the `platform` property — consult each adapter's documentation to learn more.

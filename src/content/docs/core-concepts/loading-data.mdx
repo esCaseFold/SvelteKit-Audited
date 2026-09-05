@@ -2,11 +2,12 @@
 title: Loading Data
 sidebar:
     order: 2
-----
+---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import { Aside } from '@astrojs/starlight/components';
+import { Icon } from '@astrojs/starlight/components';
 
-Before a [`+page.svelte`]() component (and its containing [`+layout.svelte`]() components) can be rendered, we often need to get some data. This is done by defining `load` functions.
+Before a [`+page.svelte`](/core-concepts/routing/#pagesvelte) component (and its containing [`+layout.svelte`](/core-concepts/routing/#layoutsvelte) components) can be rendered, we often need to get some data. This is done by defining `load` functions.
 
 ## Page Data
 A `+page.svelte` file can have a sibling `+page.js` that exports a load function, the return value of which is available to the page via the `data` prop:
@@ -97,7 +98,7 @@ In Svelte 4, you’d use `export let data` instead.
 
 Thanks to the generated `$types` module, we get full type safety.
 
-A load function in a `+page.js` file runs both on the server and in the browser (unless combined with export const ssr = false, in which case it will only run in the browser). If your load function should always run on the server (because it uses private environment variables, for example, or accesses a database) then it would go in a +page.server.js instead.
+A load function in a `+page.js` file runs both on the server and in the browser (unless combined with export const ssr = false, in which case it will [only run in the browser](/core-concepts/page-options#ssr)). If your load function should always run on the server (because it uses private environment variables, for example, or accesses a database) then it would go in a +page.server.js instead.
 
 A more realistic version of your blog post’s `load` function, that only runs on the server and pulls data from a database, might look like this:
 
@@ -440,7 +441,6 @@ In rare cases, you might need to use both together — for example, you might ne
 Often the `load` function depends on the URL in one way or another. For this, the `load` function provides you with `url`, `route` and `params`.
 
 ### url
-
 An instance of [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL), containing properties like the `origin`, `hostname`, `pathname` and `searchParams` (which contains the parsed query string as a [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) object). `url.hash` cannot be accessed during `load`, since it is unavailable on the server.
 
 :::note
@@ -811,9 +811,9 @@ Calling `error(...)` will throw an exception, making it easy to stop execution f
 
 If an [_unexpected_](/advanced/errors#unexpected-errors) error is thrown, SvelteKit will invoke [`handleError`](/advanced/hooks#handleerror) and treat it as a 500 Internal Error.
 
-:::note
+<Aside type="note" title="Previous Version Note">
 [In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the error yourself
-:::
+</Aside>
 
 ## Redirects
 
@@ -854,9 +854,9 @@ Don't use `redirect()` inside a `try {...}` block, as the redirect will immediat
 
 In the browser, you can also navigate programmatically outside of a `load` function using [`goto`](https://svelte.dev/docs/kit/$app-navigation#goto) from [`$app.navigation`](https://svelte.dev/docs/kit/$app-navigation).
 
-:::note
+<Aside type="note" title="Previous Version Note">
 [In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the `redirect` yourself
-:::
+</Aside>
 
 ## Streaming with Promises
 
@@ -994,9 +994,9 @@ Streaming data will only work when JavaScript is enabled. You should avoid retur
 The headers and status code of a response cannot be changed once the response has started streaming, therefore you cannot `setHeaders` or throw redirects inside a streamed promise.
 :::
 
-:::note
+<Aside type="note" title="Previous Version Note">
 [In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#top-level-promises-are-no-longer-awaited) top-level promises were automatically awaited, only nested promises were streamed.
-:::
+</Aside>
 
 ## Parallel Loading
 

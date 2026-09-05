@@ -5,6 +5,8 @@ sidebar:
 slug: reference/@sveltejs-kit
 ---
 
+<div class="no-copy">
+
 ```js
 import {
 	Server,
@@ -22,8 +24,11 @@ import {
 	text
 } from '@sveltejs/kit';
 ```
+</div>
 
 ## Server
+
+<div class="no-copy">
 
 ```js
 class Server {…}
@@ -37,15 +42,23 @@ init(options: ServerInitOptions): Promise<void>;
 ```js
 respond(request: Request, options: RequestOptions): Promise<Response>;
 ```
+</div>
 
 ## VERSION
+
+<div class="no-copy">
+
 ```js
 const VERSION: string;
 ```
+</div>
+
 Throws an error with a HTTP status code and an optional message. When called during request handling, this will cause SvelteKit to return an error response without invoking
 
 ## error
 Throws an error with a HTTP status code and an optional message. When called during request handling, this will cause SvelteKit to return an error response without invoking `handleError`. Make sure you’re not catching the thrown error, which would prevent SvelteKit from handling it.
+
+<div class="no-copy">
 
 ```js
 function error(status: number, body: App.Error): never;
@@ -67,8 +80,14 @@ function error(
 		: never
 ): never;
 ```
+
+</div>
+
 ## fail
 Create an `ActionFailure` object. Call when form submission fails.
+
+<div class="no-copy">
+
 ```js
 function fail(status: number): ActionFailure<undefined>;
 ```
@@ -79,6 +98,8 @@ function fail<T = undefined>(
 	data: T
 ): ActionFailure<T>;
 ```
+</div>
+
 ## invalid 
 :::note
 AVAILABLE SINCE 2.47.3
@@ -87,6 +108,9 @@ Use this to throw a validation error to imperatively fail form validation. Can b
 
 ## isActionFailure
 Checks whether this is an action failure thrown by `fail`.
+
+<div class="no-copy">
+
 ```js
 function isActionFailure(e: unknown): e is ActionFailure;
 ```
@@ -118,11 +142,17 @@ Create a JSON `Response` object from the supplied data.
 ```js
 function json(data: any, init?: ResponseInit): Response;
 ```
+
+</div>
+
 ## normalizeUrl
 :::note
 AVAILABLE SINCE 2.18.0
 :::
 Strips possible SvelteKit-internal suffixes and trailing slashes from the URL pathname. Returns the normalized URL as well as a method for adding the potential suffix back based on a new pathname (possibly including search) or URL.
+
+<div class="no-copy">
+
 ```js
 import { normalizeUrl } from '@sveltejs/kit';
 
@@ -137,6 +167,8 @@ function normalizeUrl(url: URL | string): {
 	denormalize: (url?: string | URL) => URL;
 };
 ```
+</div>
+
 ## redirect
 Redirect a request. When called during request handling, SvelteKit will return a redirect response. Make sure you’re not catching the thrown redirect, which would prevent SvelteKit from handling it.
 
@@ -147,6 +179,9 @@ Most common status codes:
 - `308 Permanent Redirect`: redirect will keep the request method, SEO will be transferred to the new page
 
 [See all redirect status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages)
+
+<div class="no-copy">
+
 ```js
 function redirect(
 	status:
@@ -675,179 +710,3528 @@ type HandleValidationError<
 ```
 
 ## HttpError
+The object returned by the [`error`](/docs/kit/@sveltejs-kit#error) function.
+
+```js
+interface HttpError {…}
+```
+
+```js
+status: number;
+```
+
+The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses), in the range 400-599.
+
+```
+body: App.Error;
+```
+
+The content of the error.
 
 ## InvalidField
 
+A function and proxy object used to imperatively create validation errors in form handlers.
+
+Access properties to create field-specific issues: `issue.fieldName('message')`.
+The type structure mirrors the input data structure for type-safe field access.
+Call `invalid(issue.foo(...), issue.nested.bar(...))` to throw a validation error.
+
+```js
+type InvalidField<T> =
+	WillRecurseIndefinitely<T> extends true
+		? Record<string | number, any>
+		: NonNullable<T> extends
+					| string
+					| number
+					| boolean
+					| File
+			? (message: string) => StandardSchemaV1.Issue
+			: NonNullable<T> extends Array<infer U>
+				? {
+						[K in number]: InvalidField<U>;
+					} & ((message: string) => StandardSchemaV1.Issue)
+				: NonNullable<T> extends RemoteFormInput
+					? {
+							[K in keyof T]-?: InvalidField<T[K]>;
+						} & ((
+							message: string
+						) => StandardSchemaV1.Issue)
+					: Record<string, never>;
+```
+
 ## KitConfig
+
+See the [configuration reference](https://svelte.dev/docs/kit/configuration) for details.
 
 ## LessThan
 
+```js
+type LessThan<
+	TNumber extends number,
+	TArray extends any[] = []
+> = TNumber extends TArray['length']
+	? TArray[number]
+	: LessThan<TNumber, [...TArray, TArray['length']]>;
+```
+
 ## LiveQueryRequestedResult
+
+```js
+type LiveQueryRequestedResult<Validated, Output> = Iterable<
+	LiveRequestedEntry<Validated, Output>
+> &
+	AsyncIterable<LiveRequestedEntry<Validated, Output>> & {
+		/**
+		 * Call `reconnect` on all live queries selected by this `requested` invocation.
+		 * This is identical to:
+		 * ```ts
+		 * import { requested } from '$app/server';
+		 *
+		 * for await (const { query } of requested(liveQuery, ...)) {
+		 *   void query.reconnect();
+		 * }
+		 * ```
+		 */
+		reconnectAll: () => Promise<void>;
+	};
+```
+
+</div>
 
 ## LiveRequestedEntry
 
+A single entry yielded by [`requested`](/docs/kit/$app-server#requested)
+when called with a `query.live`. `arg` is the validated argument; `query` is a
+`RemoteLiveQuery` bound to the client's original cache key, so `reconnect()` targets
+the correct client subscription.
+
+<div class="no-copy">
+
+```dts
+type LiveRequestedEntry<Validated, Output> = {
+	arg: Validated;
+	query: RemoteLiveQuery<Output>;
+};
+```
+
+</div>
+
 ## Load
+
+The generic form of `PageLoad` and `LayoutLoad`. You should import those from `./$types` (see [generated types](https://svelte.dev/docs/kit/types#Generated-types))
+rather than using `Load` directly.
+
+<div class="no-copy">
+
+```js
+type Load<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	InputData extends Record<string, unknown> | null = Record<
+		string,
+		any
+	> | null,
+	ParentData extends Record<string, unknown> = Record<
+		string,
+		any
+	>,
+	OutputData extends Record<string, unknown> | void =
+		Record<string, any> | void,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> = (
+	event: LoadEvent<Params, InputData, ParentData, RouteId>
+) => MaybePromise<OutputData>;
+```
+
+</div>
 
 ## LoadEvent
 
+The generic form of `PageLoadEvent` and `LayoutLoadEvent`. You should import those from `./$types` (see [generated types](https://svelte.dev/docs/kit/types#Generated-types))
+rather than using `LoadEvent` directly.
+
+<div class="no-copy">
+
+```js
+interface LoadEvent<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	Data extends Record<string, unknown> | null = Record<
+		string,
+		any
+	> | null,
+	ParentData extends Record<string, unknown> = Record<
+		string,
+		any
+	>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> extends NavigationEvent<Params, RouteId> {/*…*/}
+```
+
+<div class="no-copy">
+
+```js
+fetch: typeof fetch;
+```
+
+</div>
+
+`fetch` is equivalent to the [native `fetch` web API](https://developer.mozilla.org/en-US/docs/Web/API/fetch), with a few additional features:
+
+- It can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers for the page request.
+- It can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context).
+- Internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call.
+- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/advanced/hooks#handle)
+- During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request.
+
+You can learn more about making credentialed requests with cookies [here](/core-concepts/loading-data/#cookies)
+
+<div class="no-copy">
+
+```js
+data: Data;
+```
+
+</div>
+
+Contains the data returned by the route's server `load` function (in `+layout.server.js` or `+page.server.js`), if any.
+
+
+<div class="no-copy">
+
+```js
+setHeaders: (headers: Record<string, string>) => void;
+```
+
+</div>
+
+If you need to set headers for the response, you can do so using the this method. This is useful if you want the page to be cached, for example:
+
+```js
+//src/routes/blog/+page.js
+export async function load({ fetch, setHeaders }) {
+	const url = `https://cms.example.com/articles.json`;
+	const response = await fetch(url);
+
+	setHeaders({
+		age: response.headers.get('age'),
+		'cache-control': response.headers.get('cache-control')
+	});
+
+	return response.json();
+}
+```
+
+Setting the same header multiple times (even in separate `load` functions) is an error — you can only set a given header once.
+
+You cannot add a `set-cookie` header with `setHeaders` — use the [`cookies`](/reference/@sveltejs-kit#cookies) API in a server-only `load` function instead.
+
+`setHeaders` has no effect when a `load` function runs in the browser.
+
+<div class="no-copy">
+
+```js
+parent: () => Promise<ParentData>;
+```
+
+</div>
+
+`await parent()` returns data from parent `+layout.js` `load` functions.
+Implicitly, a missing `+layout.js` is treated as a `({ data }) => data` function, meaning that it will return and forward data from parent `+layout.server.js` files.
+
+Be careful not to introduce accidental waterfalls when using `await parent()`. If for example you only want to merge parent data into the returned output, call it _after_ fetching your other data.
+
+<div class="ts-block-property">
+
+```dts
+depends: (...deps: Array<`${string}:${string}`>) => void;
+```
+
+<div class="ts-block-property-details">
+
+This function declares that the `load` function has a _dependency_ on one or more URLs or custom identifiers, which can subsequently be used with [`invalidate()`](/docs/kit/$app-navigation#invalidate) to cause `load` to rerun.
+
+Most of the time you won't need this, as `fetch` calls `depends` on your behalf — it's only necessary if you're using a custom API client that bypasses `fetch`.
+
+URLs can be absolute or relative to the page being loaded, and must be [encoded](https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding).
+
+Custom identifiers have to be prefixed with one or more lowercase letters followed by a colon to conform to the [URI specification](https://www.rfc-editor.org/rfc/rfc3986.html).
+
+The following example shows how to use `depends` to register a dependency on a custom identifier, which is `invalidate`d after a button click, making the `load` function rerun.
+
+```js
+// @errors: 7031
+/// file: src/routes/+page.js
+let count = 0;
+export async function load({ depends }) {
+	depends('increase:count');
+
+	return { count: count++ };
+}
+```
+
+```html
+/// file: src/routes/+page.svelte
+<script>
+	import { invalidate } from '$app/navigation';
+
+	let { data } = $props();
+
+	const increase = async () => {
+		await invalidate('increase:count');
+	}
+</script>
+
+<p>{data.count}<p>
+<button on:click={increase}>Increase Count</button>
+```
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+untrack: <T>(fn: () => T) => T;
+```
+
+<div class="ts-block-property-details">
+
+Use this function to opt out of dependency tracking for everything that is synchronously called within the callback. Example:
+
+```js
+// @errors: 7031
+/// file: src/routes/+page.server.js
+export async function load({ untrack, url }) {
+	// Untrack url.pathname so that path changes don't trigger a rerun
+	if (untrack(() => url.pathname === '/')) {
+		return { message: 'Welcome!' };
+	}
+}
+```
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+tracing: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">available since</span> v2.31.0
+
+</div>
+
+Access to spans for tracing. If tracing is not enabled or the function is being run in the browser, these spans will do nothing.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+enabled: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Whether tracing is enabled.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+root: Span;
+```
+
+<div class="ts-block-property-details">
+
+The root span for the request. This span is named `sveltekit.handle.root`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+current: Span;
+```
+
+<div class="ts-block-property-details">
+
+The span associated with the current `load` function.
+
+</div>
+</div></div>
+
+</div>
+</div></div>
+
 ## LoadProperties
+
+<div class="ts-block">
+
+```dts
+type LoadProperties<
+	input extends Record<string, any> | void
+> = input extends void
+	? undefined // needs to be undefined, because void will break intellisense
+	: input extends Record<string, any>
+		? input
+		: unknown;
+```
+
+</div>
 
 ## Navigation
 
+<div class="ts-block">
+
+```dts
+type Navigation =
+	| NavigationExternal
+	| NavigationFormSubmit
+	| NavigationPopState
+	| NavigationLink;
+```
+
+</div>
+
 ## NavigationBase
+
+<div class="ts-block">
+
+```dts
+interface NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: NavigationType;
+```
+
+<div class="ts-block-property-details">
+
+The type of navigation:
+- `enter`: The app has hydrated/started
+- `form`: The user submitted a `<form method="GET">`
+- `goto`: Navigation was triggered by a `goto(...)` call or a redirect
+- `leave`: The app is being left either because the tab is being closed or a navigation to a different document is occurring
+- `link`: Navigation was triggered by a link click
+- `popstate`: Navigation was triggered by back/forward navigation
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+from: NavigationTarget | null;
+```
+
+<div class="ts-block-property-details">
+
+Where navigation was triggered from
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+to: NavigationTarget | null;
+```
+
+<div class="ts-block-property-details">
+
+Where navigation is going to/has gone to
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+willUnload: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Whether or not the navigation will result in the page being unloaded (i.e. not a client-side navigation).
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+complete: Promise<void>;
+```
+
+<div class="ts-block-property-details">
+
+A promise that resolves once the navigation is complete, and rejects if the navigation
+fails or is aborted. In the case of a `willUnload` navigation, the promise will never resolve
+
+</div>
+</div></div>
 
 ## NavigationEnter
 
+The navigation that occurs when the app starts/hydrates
+
+<div class="ts-block">
+
+```dts
+interface NavigationEnter extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'enter';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+In case of a history back/forward navigation, the number of steps to go back/forward
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+Dispatched `Event` object when navigation occurred by `popstate` or `link`.
+
+</div>
+</div></div>
+
 ## NavigationEvent
+
+<div class="ts-block">
+
+```dts
+interface NavigationEvent<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+params: Params;
+```
+
+<div class="ts-block-property-details">
+
+The parameters of the current page - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+route: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+Info about the current route
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+id: RouteId;
+```
+
+<div class="ts-block-property-details">
+
+The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+url: URL;
+```
+
+<div class="ts-block-property-details">
+
+The URL of the current page
+
+</div>
+</div></div>
 
 ## NavigationExternal
 
+<div class="ts-block">
+
+```dts
+type NavigationExternal = NavigationGoto | NavigationLeave;
+```
+
+</div>
+
 ## NavigationFormSubmit
+
+A navigation triggered by a `<form method="GET">`
+
+<div class="ts-block">
+
+```dts
+interface NavigationFormSubmit extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'form';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event: SubmitEvent;
+```
+
+<div class="ts-block-property-details">
+
+The `SubmitEvent` that caused the navigation
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+In case of a history back/forward navigation, the number of steps to go back/forward
+
+</div>
+</div></div>
 
 ## NavigationGoto
 
+A navigation triggered by a `goto(...)` call or a redirect
+
+<div class="ts-block">
+
+```dts
+interface NavigationGoto extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'goto';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+In case of a history back/forward navigation, the number of steps to go back/forward
+
+</div>
+</div></div>
+
 ## NavigationLeave
+
+A navigation triggered by the tab being closed, or the user navigating to a different document
+
+<div class="ts-block">
+
+```dts
+interface NavigationLeave extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'leave';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+In case of a history back/forward navigation, the number of steps to go back/forward
+
+</div>
+</div></div>
 
 ## NavigationLink
 
+A navigation triggered by a link click
+
+<div class="ts-block">
+
+```dts
+interface NavigationLink extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'link';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event: PointerEvent;
+```
+
+<div class="ts-block-property-details">
+
+The `PointerEvent` that caused the navigation
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+In case of a history back/forward navigation, the number of steps to go back/forward
+
+</div>
+</div></div>
+
 ## NavigationPopState
+
+A navigation triggered by back/forward navigation
+
+<div class="ts-block">
+
+```dts
+interface NavigationPopState extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'popstate';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta: number;
+```
+
+<div class="ts-block-property-details">
+
+In case of a history back/forward navigation, the number of steps to go back/forward
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event: PopStateEvent;
+```
+
+<div class="ts-block-property-details">
+
+The `PopStateEvent` that caused the navigation
+
+</div>
+</div></div>
 
 ## NavigationTarget
 
+Information about the target of a specific navigation.
+
+<div class="ts-block">
+
+```dts
+interface NavigationTarget<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+params: Params | null;
+```
+
+<div class="ts-block-property-details">
+
+Parameters of the target page - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object.
+Is `null` if the target is not part of the SvelteKit app (could not be resolved to a route).
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+route: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+Info about the target route
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+id: RouteId | null;
+```
+
+<div class="ts-block-property-details">
+
+The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+url: URL;
+```
+
+<div class="ts-block-property-details">
+
+The URL that is navigated to
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+scroll: { x: number; y: number } | null;
+```
+
+<div class="ts-block-property-details">
+
+The scroll position associated with this navigation.
+
+For the `from` target, this is the scroll position at the moment of navigation.
+
+For the `to` target, this represents the scroll position that will be or was restored:
+- In `beforeNavigate` and `onNavigate`, this is only available for `popstate` navigations (back/forward button)
+	and will be `null` for other navigation types, since the final scroll position isn't known
+	ahead of time.
+- In `afterNavigate`, this is always the scroll position that was applied after the navigation
+	completed.
+
+</div>
+</div></div>
+
 ## NavigationType
+
+- `enter`: The app has hydrated/started
+- `form`: The user submitted a `<form method="GET">`
+- `goto`: Navigation was triggered by a `goto(...)` call or a redirect
+- `leave`: The app is being left either because the tab is being closed or a navigation to a different document is occurring
+- `link`: Navigation was triggered by a link click
+- `popstate`: Navigation was triggered by back/forward navigation
+
+<div class="ts-block">
+
+```dts
+type NavigationType =
+	| 'enter'
+	| 'form'
+	| 'leave'
+	| 'link'
+	| 'goto'
+	| 'popstate';
+```
+
+</div>
 
 ## NumericRange
 
+<div class="ts-block">
+
+```dts
+type NumericRange<
+	TStart extends number,
+	TEnd extends number
+> = Exclude<TEnd | LessThan<TEnd>, LessThan<TStart>>;
+```
+
+</div>
+
 ## OnNavigate
+
+The argument passed to [`onNavigate`](/docs/kit/$app-navigation#onNavigate) callbacks.
+
+<div class="ts-block">
+
+```dts
+type OnNavigate = Navigation & {
+	type: Exclude<NavigationType, 'enter' | 'leave'>;
+	/**
+	 * Since `onNavigate` callbacks are called immediately before a client-side navigation, they will never be called with a navigation that unloads the page.
+	 */
+	willUnload: false;
+};
+```
+
+</div>
 
 ## Page
 
+The shape of the [`page`](/docs/kit/$app-state#page) reactive object and the [`$page`](/docs/kit/$app-stores) store.
+
+<div class="ts-block">
+
+```dts
+interface Page<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+url: URL & { pathname: ResolvedPathname };
+```
+
+<div class="ts-block-property-details">
+
+The URL of the current page.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+params: Params;
+```
+
+<div class="ts-block-property-details">
+
+The parameters of the current page - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+route: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+Info about the current route.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+id: RouteId;
+```
+
+<div class="ts-block-property-details">
+
+The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+status: number;
+```
+
+<div class="ts-block-property-details">
+
+HTTP status code of the current page.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+error: App.Error | null;
+```
+
+<div class="ts-block-property-details">
+
+The error object of the current page, if any. Filled from the `handleError` hooks.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+data: App.PageData & Record<string, any>;
+```
+
+<div class="ts-block-property-details">
+
+The merged result of all data from all `load` functions on the current page. You can type a common denominator through `App.PageData`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+state: App.PageState;
+```
+
+<div class="ts-block-property-details">
+
+The page state, which can be manipulated using the [`pushState`](/docs/kit/$app-navigation#pushState) and [`replaceState`](/docs/kit/$app-navigation#replaceState) functions from `$app/navigation`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+form: any;
+```
+
+<div class="ts-block-property-details">
+
+Filled only after a form submission. See [form actions](/docs/kit/form-actions) for more info.
+
+</div>
+</div></div>
+
 ## ParamMatcher
 
+The shape of a param matcher. See [matching](/docs/kit/advanced-routing#Matching) for more info.
+
+<div class="ts-block">
+
+```dts
+type ParamMatcher = (param: string) => boolean;
+```
+
+</div>
+
 ## PrerenderOption
+
+<div class="ts-block">
+
+```dts
+type PrerenderOption = boolean | 'auto';
+```
+
+</div>
 
 ## QueryRequestedResult
 
+<div class="ts-block">
+
+```dts
+type QueryRequestedResult<Validated, Output> = Iterable<
+	RequestedEntry<Validated, Output>
+> &
+	AsyncIterable<RequestedEntry<Validated, Output>> & {
+		/**
+		 * Call `refresh` on all queries selected by this `requested` invocation.
+		 * This is identical to:
+		 * ```ts
+		 * import { requested } from '$app/server';
+		 *
+		 * for await (const { query } of requested(getPost, ...)) {
+		 *   void query.refresh();
+		 * }
+		 * ```
+		 */
+		refreshAll: () => Promise<void>;
+	};
+```
+
+</div>
+
 ## Redirect
+
+The object returned by the [`redirect`](/docs/kit/@sveltejs-kit#redirect) function.
+
+<div class="ts-block">
+
+```dts
+interface Redirect {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+status: 300 | 301 | 302 | 303 | 304 | 305 | 306 | 307 | 308;
+```
+
+<div class="ts-block-property-details">
+
+The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages), in the range 300-308.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+location: string;
+```
+
+<div class="ts-block-property-details">
+
+The location to redirect to.
+
+</div>
+</div></div>
 
 ## RemoteCommand
 
+The type of a remote `command` function. See [Remote functions](/docs/kit/remote-functions#command) for full documentation.
+
+<div class="ts-block">
+
+```dts
+type RemoteCommand<Input, Output> = {
+	(
+		arg: undefined extends Input ? Input | void : Input
+	): Promise<Output> & {
+		updates(
+			...updates: RemoteQueryUpdate[]
+		): Promise<Output>;
+	};
+	/** The number of pending command executions */
+	get pending(): number;
+};
+```
+
+</div>
+
 ## RemoteForm
+
+The type of a remote `form` function. See [Remote functions](/docs/kit/remote-functions#form) for full documentation.
+
+<div class="ts-block">
+
+```dts
+type RemoteForm<
+	Input extends RemoteFormInput | void,
+	Output
+> = {
+	/** Attachment that sets up an event handler that intercepts the form submission on the client to prevent a full page reload */
+	[attachment: symbol]: (node: HTMLFormElement) => void;
+	method: 'POST';
+	/** The URL to send the form to. */
+	action: string;
+	/** The `<form>` element this instance is currently attached to, if any. */
+	get element(): HTMLFormElement | null;
+	/** Submit the currently attached form programmatically. */
+	submit(): Promise<boolean> & {
+		updates: (
+			...updates: RemoteQueryUpdate[]
+		) => Promise<boolean>;
+	};
+	/** Use the `enhance` method to influence what happens when the form is submitted. */
+	enhance(
+		callback: RemoteFormEnhanceCallback<Input, Output>
+	): {
+		method: 'POST';
+		action: string;
+		[attachment: symbol]: (node: HTMLFormElement) => void;
+	};
+	/**
+	 * Create an instance of the form for the given `id`.
+	 * The `id` is stringified and used for deduplication to potentially reuse existing instances.
+	 * Useful when you have multiple forms that use the same remote form action, for example in a loop.
+	 * ```svelte
+	 * {#each todos as todo}
+	 *	{@const todoForm = updateTodo.for(todo.id)}
+	 *	<form {...todoForm}>
+	 *		{#if todoForm.result?.invalid}<p>Invalid data</p>{/if}
+	 *		...
+	 *	</form>
+	 *	{/each}
+	 * ```
+	 */
+	for(
+		id: ExtractId<Input>
+	): Omit<RemoteForm<Input, Output>, 'for'>;
+	/** Preflight checks */
+	preflight(
+		schema: StandardSchemaV1<Input, any>
+	): RemoteForm<Input, Output>;
+	/** Validate the form contents programmatically */
+	validate(options?: {
+		/** Set this to `true` to also show validation issues of fields that haven't been touched yet. */
+		includeUntouched?: boolean;
+		/** Set this to `true` to only run the `preflight` validation. */
+		preflightOnly?: boolean;
+	}): Promise<void>;
+	/** The result of the form submission */
+	get result(): Output | undefined;
+	/** The number of pending submissions */
+	get pending(): number;
+	/** True if the form has been submitted at least once */
+	get submitted(): boolean;
+	/** Access form fields using object notation */
+	fields: RemoteFormFieldsRoot<Input>;
+};
+```
+
+</div>
 
 ## RemoteFormEnhanceCallback
 
+The callback passed to a remote form's `enhance` method. See [Remote functions](/docs/kit/remote-functions#form) for full documentation.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormEnhanceCallback<
+	Input extends RemoteFormInput | void =
+		RemoteFormInput | void,
+	Output = any
+> = (
+	form: RemoteFormEnhanceInstance<Input, Output>
+) => MaybePromise<void>;
+```
+
+</div>
+
 ## RemoteFormEnhanceInstance
+
+The form instance as received inside an `enhance` callback. See [Remote functions](/docs/kit/remote-functions#form) for full documentation.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormEnhanceInstance<
+	Input extends RemoteFormInput | void =
+		RemoteFormInput | void,
+	Output = any
+> = Omit<
+	RemoteForm<Input, Output>,
+	'enhance' | 'element'
+> & {
+	readonly element: HTMLFormElement;
+};
+```
+
+</div>
 
 ## RemoteFormField
 
+Form field accessor type that provides name(), value(), and issues() methods
+
+<div class="ts-block">
+
+```dts
+type RemoteFormField<Value extends RemoteFormFieldValue> =
+	RemoteFormFieldMethods<Value> & {
+		/**
+		 * Returns an object that can be spread onto an input element with the correct type attribute,
+		 * aria-invalid attribute if the field is invalid, and appropriate value/checked property getters/setters.
+		 * @example
+		 * ```svelte
+		 * <input {...myForm.fields.myString.as('text')} />
+		 * <input {...myForm.fields.myNumber.as('number')} />
+		 * <input {...myForm.fields.myBoolean.as('checkbox')} />
+		 * ```
+		 */
+		as<T extends RemoteFormFieldType<Value>>(
+			...args: AsArgs<T, Value>
+		): InputElementProps<T>;
+	};
+```
+
+</div>
+
 ## RemoteFormFieldType
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFieldType<T> = {
+	[K in keyof InputTypeMap]: T extends InputTypeMap[K]
+		? K
+		: never;
+}[keyof InputTypeMap];
+```
+
+</div>
 
 ## RemoteFormFieldValue
 
+<div class="ts-block">
+
+```dts
+type RemoteFormFieldValue =
+	| string
+	| string[]
+	| number
+	| boolean
+	| File
+	| File[];
+```
+
+</div>
+
 ## RemoteFormFields
+
+Recursive type to build form fields structure with proxy access
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFields<T> =
+	WillRecurseIndefinitely<T> extends true
+		? RecursiveFormFields
+		: NonNullable<T> extends
+					| string
+					| number
+					| boolean
+					| File
+			? RemoteFormField<NonNullable<T>>
+			: // [NonNullable<T>] is used to prevent distributing over union while still allowing
+				// nullable wrappers (e.g. `string[] | undefined` from a schema with `.default([])`)
+				// to be treated as arrays; only the last condition should distribute over unions
+				[NonNullable<T>] extends [string[] | File[]]
+				? RemoteFormField<NonNullable<T>> & {
+						[K in number]: RemoteFormField<
+							NonNullable<T>[number]
+						>;
+					}
+				: [NonNullable<T>] extends [Array<infer U>]
+					? RemoteFormFieldContainer<NonNullable<T>> & {
+							[K in number]: RemoteFormFields<U>;
+						}
+					: RemoteFormFieldContainer<T> & {
+							[K in KeysOfUnion<T>]-?: RemoteFormFields<
+								ValueOfUnionKey<T, K>
+							>;
+						};
+```
+
+</div>
 
 ## RemoteFormInput
 
+<div class="no-copy">
+
+```dts
+interface RemoteFormInput {/*…*/}
+```
+
+</div>
+
+<div class="no-copy">
+
+```js
+[key: string]: MaybeArray<string | number | boolean | File | RemoteFormInput> | undefined;
+```
+
+</div>
+
 ## RemoteFormIssue
+
+<div class="no-copy">
+
+```js
+interface RemoteFormIssue {/*…*/}
+```
+
+<div class="no-copy">
+
+```js
+message: string;
+```
+
+</div>
+
+<div class="no-copy">
+
+```js
+path: Array<string | number>;
+```
+
+</div>
 
 ## RemoteLiveQuery
 
+<div class="no-copy">
+
+```js
+type RemoteLiveQuery<T> = RemoteResource<T> &
+	AsyncIterable<T> & {
+		/** `true` if the live stream is currently connected. */
+		readonly connected: boolean;
+		/** `true` once the current live stream iterator is done. */
+		readonly done: boolean;
+		/** Reconnects the live stream immediately. */
+		reconnect(): Promise<void>;
+	};
+```
+
+</div>
+
 ## RemoteLiveQueryFunction
+
+The type of a remote `query.live` function. See [Remote functions](https://svelte.dev/docs/kit/remote-functions#query.live) for full documentation.
+
+The optional `Validated` generic parameter represents the argument type *after* the
+query's schema has validated and (optionally) transformed it, and matches the type
+yielded by [`requested`](https://svelte.dev/docs/kit/$app-server#requested).
+
+<div class="no-copy">
+
+```js
+type RemoteLiveQueryFunction<
+	Input,
+	Output,
+	_Validated = Input
+> = (
+	arg: undefined extends Input ? Input | void : Input
+) => RemoteLiveQuery<Output>;
+```
+
+</div>
 
 ## RemotePrerenderFunction
 
+The type of a remote `prerender` function. See [Remote functions](https://svelte.dev/docs/kit/remote-functions#prerender) for full documentation.
+
+<div class="no-copy">
+
+```js
+type RemotePrerenderFunction<Input, Output> = (
+	arg: undefined extends Input ? Input | void : Input
+) => RemoteResource<Output>;
+```
+
+</div>
+
 ## RemoteQuery
+
+<div class="no-copy">
+
+```js
+type RemoteQuery<T> = RemoteResource<T> & {
+	/**
+	 * On the client, this function will update the value of the query without re-fetching it.
+	 *
+	 * On the server, this can be called in the context of a `command` or `form` and the specified data will accompany the action response back to the client.
+	 * This prevents SvelteKit needing to refresh all queries on the page in a second server round-trip.
+	 */
+	set(value: T): void;
+	/**
+	 * On the client, this function will re-fetch the query from the server.
+	 *
+	 * On the server, this can be called in the context of a `command` or `form` and the refreshed data will accompany the action response back to the client.
+	 * This prevents SvelteKit needing to refresh all queries on the page in a second server round-trip.
+	 */
+	refresh(): Promise<void>;
+	/**
+	 * Temporarily override a query's value during a [single-flight mutation](https://svelte.dev/docs/kit/remote-functions#Single-flight-mutations) to provide optimistic updates.
+	 *
+	 * ```svelte
+	 * <script>
+	 *   import { getTodos, addTodo } from './todos.remote.js';
+	 *   const todos = getTodos();
+	 * </script>
+	 *
+	 * <form {...addTodo.enhance(async (form) => {
+	 *   await form.submit().updates(
+	 *     todos.withOverride((todos) => [...todos, { text: form.fields.text.value() }])
+	 *   );
+	 * })}>
+	 *   <input type="text" name="text" />
+	 *   <button type="submit">Add Todo</button>
+	 * </form>
+	 * ```
+	 */
+	withOverride(
+		update: (current: T) => T
+	): RemoteQueryOverride;
+};
+```
+
+</div>
 
 ## RemoteQueryFunction
 
+The return value of a remote `query` function. See [Remote functions](https://svelte.dev/docs/kit/remote-functions#query).
+
+The optional `Validated` generic parameter represents the argument type *after* the
+query's schema has validated and (optionally) transformed it — this is the type the
+query's implementation function receives on the server, and the type yielded by
+[`requested`](https://svelte.dev/docs/kit/$app-server#requested). For queries declared
+with [Standard Schema](https://standardschema.dev/) it differs from `Input` when the
+schema contains a transform (e.g. `v.pipe(v.number(), v.transform(String))` has
+`Input = number` but `Validated = string`). For `'unchecked'` validators and queries
+without arguments it defaults to `Input`.
+
+<div class="no-copy">
+
+```js
+type RemoteQueryFunction<
+	Input,
+	Output,
+	_Validated = Input
+> = (
+	arg: undefined extends Input ? Input | void : Input
+) => RemoteQuery<Output>;
+```
+
+</div>
+
 ## RemoteQueryOverride
+
+<div class="no-copy">
+
+```js
+type RemoteQueryOverride = () => void;
+```
+
+</div>
 
 ## RemoteQueryUpdate
 
+<div class="no-copy">
+
+```js
+type RemoteQueryUpdate =
+	| RemoteQuery<any>
+	| RemoteLiveQuery<any>
+	| RemoteQueryFunction<any, any>
+	| RemoteLiveQueryFunction<any, any>
+	| RemoteQueryOverride;
+```
+
+</div>
+
 ## RemoteResource
+
+<div class="no-copy">
+
+```js
+type RemoteResource<T> = Promise<T> & {
+	/** The error in case the query fails. Most often this is a [`HttpError`](https://svelte.dev/docs/kit/@sveltejs-kit#HttpError) but it isn't guaranteed to be. */
+	get error(): any;
+	/** `true` before the first result is available and during refreshes */
+	get loading(): boolean;
+} & (
+		| {
+				/** The current value of the query. Undefined until `ready` is `true` */
+				get current(): undefined;
+				ready: false;
+		  }
+		| {
+				/** The current value of the query. Undefined until `ready` is `true` */
+				get current(): T;
+				ready: true;
+		  }
+	);
+```
+
+</div>
 
 ## RequestEvent
 
+<div class="no-copy">
+
+```js
+interface RequestEvent<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
+```
+
+<div class="no-copy">
+
+```js
+cookies: Cookies;
+```
+
+</div>
+
+Get or set cookies related to the current request
+
+<div class="ts-block-property">
+
+```js
+fetch: typeof fetch;
+```
+
+</div>
+
+`fetch` is equivalent to the [native `fetch` web API](https://developer.mozilla.org/en-US/docs/Web/API/fetch), with a few additional features:
+
+- It can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers for the page request.
+- It can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context).
+- Internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call.
+- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/advanced/hooks#handle)
+- During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request.
+
+You can learn more about making credentialed requests with cookies [here](/core-concepts/loading-data#cookies).
+
+<div class="no-copy">
+
+```js
+getClientAddress: () => string;
+```
+
+</div>
+
+The client's IP address, set by the adapter.
+
+<div class="no-copy">
+
+```js
+locals: App.Locals;
+```
+
+</div>
+
+Contains custom data that was added to the request within the [`server handle hook`](/advanced/hooks#handle).
+
+<div class="no-copy">
+
+```js
+params: Params;
+```
+
+</div>
+
+The parameters of the current route - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object.
+
+In the context of a remote function request initiated by the client, this relates to the page the remote function
+was called from, _not_ the URL of the endpoint SvelteKit creates for the remote function. Never use this to determine
+whether or not a user is authorized to access certain data, as these values are part of the request which could be manipulated.
+
+<div class="no-copy">
+
+```js
+platform: Readonly<App.Platform> | undefined;
+```
+
+</div>
+
+Additional data made available through the adapter.
+
+
+<div class="no-copy">
+
+```js
+request: Request;
+```
+
+</div>
+
+The original request object.
+
+<div class="no-copy">
+
+```js
+route: {/*…*/}
+```
+
+</div>
+
+Info about the current route.
+
+<div class="no-copy">
+
+```dts
+id: RouteId;
+```
+
+</div>
+
+The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+
+In the context of a remote function request initiated by the client, this relates to the page the remote function
+was called from, _not_ the URL of the endpoint SvelteKit creates for the remote function. Never use this to determine
+whether or not a user is authorized to access certain data, as these values are part of the request which could be manipulated.
+
+<div class="no-copy">
+
+```js
+setHeaders: (headers: Record<string, string>) => void;
+```
+</div>
+
+If you need to set headers for the response, you can do so using the this method. This is useful if you want the page to be cached, for example:
+
+```js
+//src/routes/blog/+page.js
+export async function load({ fetch, setHeaders }) {
+	const url = `https://cms.example.com/articles.json`;
+	const response = await fetch(url);
+
+	setHeaders({
+		age: response.headers.get('age'),
+		'cache-control': response.headers.get('cache-control')
+	});
+
+	return response.json();
+}
+```
+
+Setting the same header multiple times (even in separate `load` functions) is an error — you can only set a given header once.
+
+You cannot add a `set-cookie` header with `setHeaders` — use the [`cookies`](/docs/kit/@sveltejs-kit#Cookies) API instead.
+
+<div class="no-copy">
+
+```js
+url: URL;
+```
+
+</div>
+
+The requested URL.
+
+In the context of a remote function request initiated by the client, this relates to the page the remote function
+was called from, _not_ the URL of the endpoint SvelteKit creates for the remote function. Never use this to determine
+whether or not a user is authorized to access certain data, as these values are part of the request which could be manipulated.
+
+<div class="no-copy">
+
+```js
+isDataRequest: boolean;
+```
+</div>
+
+
+`true` if the request comes from the client asking for `+page/layout.server.js` data. The `url` property will be stripped of the internal information
+related to the data request in this case. Use this property instead if the distinction is important to you.
+
+<div class="no-copy">
+
+```js
+isSubRequest: boolean;
+```
+
+</div>
+
+`true` for `+server.js` calls coming from SvelteKit without the overhead of actually making an HTTP request. This happens when you make same-origin `fetch` requests on the server.
+
+<div class="no-copy">
+
+```dts
+tracing: {/*…*/}
+```
+
+</div>
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">available since</span> v2.31.0
+
+</div>
+
+Access to spans for tracing. If tracing is not enabled, these spans will do nothing.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+enabled: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Whether tracing is enabled.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+root: Span;
+```
+
+<div class="ts-block-property-details">
+
+The root span for the request. This span is named `sveltekit.handle.root`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+current: Span;
+```
+
+<div class="ts-block-property-details">
+
+The span associated with the current `handle` hook, `load` function, or form action.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+isRemoteRequest: boolean;
+```
+
+<div class="ts-block-property-details">
+
+`true` if the request comes from the client via a remote function. The `url` property will be stripped of the internal information
+related to the data request in this case. Use this property instead if the distinction is important to you.
+
+</div>
+</div></div>
+
 ## RequestHandler
+
+A `(event: RequestEvent) => Response` function exported from a `+server.js` file that corresponds to an HTTP verb (`GET`, `PUT`, `PATCH`, etc) and handles requests with that method.
+
+It receives `Params` as the first generic argument, which you can skip by using [generated types](/docs/kit/types#Generated-types) instead.
+
+<div class="ts-block">
+
+```dts
+type RequestHandler<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> = (
+	event: RequestEvent<Params, RouteId>
+) => MaybePromise<Response>;
+```
+
+</div>
 
 ## RequestedEntry
 
+A single entry yielded by [`requested`](/docs/kit/$app-server#requested)
+when called with a regular `query`. `arg` is the validated argument (the input *after*
+the query's schema validated and transformed it, if applicable); `query` is a
+`RemoteQuery` bound to the client's original cache key, so `refresh()` / `set()` will
+update the correct client entry.
+
+<div class="ts-block">
+
+```dts
+type RequestedEntry<Validated, Output> = {
+	arg: Validated;
+	query: RemoteQuery<Output>;
+};
+```
+
+</div>
+
 ## RequestedResult
+
+<div class="ts-block">
+
+```dts
+type RequestedResult<Validated, Output> =
+	| QueryRequestedResult<Validated, Output>
+	| LiveQueryRequestedResult<Validated, Output>;
+```
+
+</div>
 
 ## Reroute
 
+<blockquote class="since note">
+
+Available since 2.3.0
+
+</blockquote>
+
+The [`reroute`](/docs/kit/hooks#reroute) hook allows you to modify the URL before it is used to determine which route to render.
+
+<div class="ts-block">
+
+```dts
+type Reroute = (event: {
+	url: URL;
+	fetch: typeof fetch;
+}) => MaybePromise<void | string>;
+```
+
+</div>
+
 ## ResolveOptions
+
+<div class="ts-block">
+
+```dts
+interface ResolveOptions {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+transformPageChunk?: (input: { html: string; done: boolean }) => MaybePromise<string | undefined>;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `input` the html chunk and the info if this is the last chunk
+
+</div>
+
+Applies custom transforms to HTML. If `done` is true, it's the final chunk. Chunks are not guaranteed to be well-formed HTML
+(they could include an element's opening tag but not its closing tag, for example)
+but they will always be split at sensible boundaries such as `%sveltekit.head%` or layout/page components.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+filterSerializedResponseHeaders?: (name: string, value: string) => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `name` header name
+- `value` header value
+
+</div>
+
+Determines which headers should be included in serialized responses when a `load` function loads a resource with `fetch`.
+By default, none will be included.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+preload?: (input: { type: 'font' | 'css' | 'js' | 'asset'; path: string }) => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `input` the type of the file and its path
+
+</div>
+
+Determines what should be added to the `<head>` tag to preload it.
+By default, `js` and `css` files will be preloaded.
+
+</div>
+</div></div>
 
 ## RouteDefinition
 
+<div class="ts-block">
+
+```dts
+interface RouteDefinition<Config = any> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+id: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+api: {
+	methods: Array<HttpMethod | '*'>;
+};
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+page: {
+	methods: Array<Extract<HttpMethod, 'GET' | 'POST'>>;
+};
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+pattern: RegExp;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+prerender: PrerenderOption;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+segments: RouteSegment[];
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+methods: Array<HttpMethod | '*'>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+config: Config;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 ## SSRManifest
+
+<div class="ts-block">
+
+```dts
+interface SSRManifest {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+appDir: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+appPath: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+assets: Set<string>;
+```
+
+<div class="ts-block-property-details">
+
+Static files from `kit.config.files.assets` and the service worker (if any).
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+mimeTypes: Record<string, string>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+_: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+private fields
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+client: BuildData['client'];
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+<div class="ts-block-property">
+
+```dts
+nodes: SSRNodeLoader[];
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+<div class="ts-block-property">
+
+```dts
+remotes: Record<string, () => Promise<any>>;
+```
+
+<div class="ts-block-property-details">
+
+hashed filename -> import to that file
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+routes: SSRRoute[];
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+<div class="ts-block-property">
+
+```dts
+prerendered_routes: Set<string>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+<div class="ts-block-property">
+
+```dts
+matchers: () => Promise<Record<string, ParamMatcher>>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+<div class="ts-block-property">
+
+```dts
+server_assets: Record<string, number>;
+```
+
+<div class="ts-block-property-details">
+
+A `[file]: size` map of all assets imported by server code.
+
+</div>
+</div></div>
+
+</div>
+</div></div>
 
 ## ServerInit
 
+<blockquote class="since note">
+
+Available since 2.10.0
+
+</blockquote>
+
+The [`init`](/docs/kit/hooks#init) will be invoked before the server responds to its first request
+
+<div class="ts-block">
+
+```dts
+type ServerInit = () => MaybePromise<void>;
+```
+
+</div>
+
 ## ServerInitOptions
+
+<div class="ts-block">
+
+```dts
+interface ServerInitOptions {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+env: Record<string, string>;
+```
+
+<div class="ts-block-property-details">
+
+A map of environment variables.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+read?: (file: string) => MaybePromise<ReadableStream | null>;
+```
+
+<div class="ts-block-property-details">
+
+A function that turns an asset filename into a `ReadableStream`. Required for the `read` export from `$app/server` to work.
+
+</div>
+</div></div>
 
 ## ServerLoad
 
+The generic form of `PageServerLoad` and `LayoutServerLoad`. You should import those from `./$types` (see [generated types](/docs/kit/types#Generated-types))
+rather than using `ServerLoad` directly.
+
+<div class="ts-block">
+
+```dts
+type ServerLoad<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	ParentData extends Record<string, any> = Record<
+		string,
+		any
+	>,
+	OutputData extends Record<string, any> | void = Record<
+		string,
+		any
+	> | void,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> = (
+	event: ServerLoadEvent<Params, ParentData, RouteId>
+) => MaybePromise<OutputData>;
+```
+
+</div>
+
 ## ServerLoadEvent
+
+<div class="ts-block">
+
+```dts
+interface ServerLoadEvent<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	ParentData extends Record<string, any> = Record<
+		string,
+		any
+	>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> extends RequestEvent<Params, RouteId> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+parent: () => Promise<ParentData>;
+```
+
+<div class="ts-block-property-details">
+
+`await parent()` returns data from parent `+layout.server.js` `load` functions.
+
+Be careful not to introduce accidental waterfalls when using `await parent()`. If for example you only want to merge parent data into the returned output, call it _after_ fetching your other data.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+depends: (...deps: string[]) => void;
+```
+
+<div class="ts-block-property-details">
+
+This function declares that the `load` function has a _dependency_ on one or more URLs or custom identifiers, which can subsequently be used with [`invalidate()`](/docs/kit/$app-navigation#invalidate) to cause `load` to rerun.
+
+Most of the time you won't need this, as `fetch` calls `depends` on your behalf — it's only necessary if you're using a custom API client that bypasses `fetch`.
+
+URLs can be absolute or relative to the page being loaded, and must be [encoded](https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding).
+
+Custom identifiers have to be prefixed with one or more lowercase letters followed by a colon to conform to the [URI specification](https://www.rfc-editor.org/rfc/rfc3986.html).
+
+The following example shows how to use `depends` to register a dependency on a custom identifier, which is `invalidate`d after a button click, making the `load` function rerun.
+
+```js
+// @errors: 7031
+/// file: src/routes/+page.js
+let count = 0;
+export async function load({ depends }) {
+	depends('increase:count');
+
+	return { count: count++ };
+}
+```
+
+```html
+/// file: src/routes/+page.svelte
+<script>
+	import { invalidate } from '$app/navigation';
+
+	let { data } = $props();
+
+	const increase = async () => {
+		await invalidate('increase:count');
+	}
+</script>
+
+<p>{data.count}<p>
+<button on:click={increase}>Increase Count</button>
+```
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+untrack: <T>(fn: () => T) => T;
+```
+
+<div class="ts-block-property-details">
+
+Use this function to opt out of dependency tracking for everything that is synchronously called within the callback. Example:
+
+```js
+// @errors: 7031
+/// file: src/routes/+page.js
+export async function load({ untrack, url }) {
+	// Untrack url.pathname so that path changes don't trigger a rerun
+	if (untrack(() => url.pathname === '/')) {
+		return { message: 'Welcome!' };
+	}
+}
+```
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+tracing: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">available since</span> v2.31.0
+
+</div>
+
+Access to spans for tracing. If tracing is not enabled, these spans will do nothing.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+enabled: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Whether tracing is enabled.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+root: Span;
+```
+
+<div class="ts-block-property-details">
+
+The root span for the request. This span is named `sveltekit.handle.root`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+current: Span;
+```
+
+<div class="ts-block-property-details">
+
+The span associated with the current server `load` function.
+
+</div>
+</div></div>
+
+</div>
+</div></div>
 
 ## Snapshot
 
+The type of `export const snapshot` exported from a page or layout component.
+
+<div class="ts-block">
+
+```dts
+interface Snapshot<T = any> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+capture: () => T;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+restore: (snapshot: T) => void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 ## SubmitFunction
+
+<div class="ts-block">
+
+```dts
+type SubmitFunction<
+	Success extends Record<string, unknown> | undefined =
+		Record<string, any>,
+	Failure extends Record<string, unknown> | undefined =
+		Record<string, any>
+> = (input: {
+	action: URL;
+	formData: FormData;
+	formElement: HTMLFormElement;
+	controller: AbortController;
+	submitter: HTMLElement | null;
+	cancel: () => void;
+}) => MaybePromise<
+	| void
+	| ((opts: {
+			formData: FormData;
+			formElement: HTMLFormElement;
+			action: URL;
+			result: ActionResult<Success, Failure>;
+			/**
+			 * Call this to get the default behavior of a form submission response.
+			 * @param options Set `reset: false` if you don't want the `<form>` values to be reset after a successful submission.
+			 * @param invalidateAll Set `invalidateAll: false` if you don't want the action to call `invalidateAll` after submission.
+			 */
+			update: (options?: {
+				reset?: boolean;
+				invalidateAll?: boolean;
+			}) => Promise<void>;
+	  }) => MaybePromise<void>)
+>;
+```
+
+</div>
 
 ## Transport
 
+<blockquote class="since note">
+
+Available since 2.11.0
+
+</blockquote>
+
+The [`transport`](/docs/kit/hooks#transport) hook allows you to transport custom types across the server/client boundary.
+
+Each transporter has a pair of `encode` and `decode` functions. On the server, `encode` determines whether a value is an instance of the custom type and, if so, returns a non-falsy encoding of the value which can be an object or an array (or `false` otherwise).
+
+In the browser, `decode` turns the encoding back into an instance of the custom type.
+
+```ts
+import type { Transport } from '@sveltejs/kit';
+
+declare class MyCustomType {
+	data: any
+}
+
+// hooks.js
+export const transport: Transport = {
+	MyCustomType: {
+		encode: (value) => value instanceof MyCustomType && [value.data],
+		decode: ([data]) => new MyCustomType(data)
+	}
+};
+```
+
+<div class="ts-block">
+
+```dts
+type Transport = Record<string, Transporter>;
+```
+
+</div>
+
 ## Transporter
+
+A member of the [`transport`](/docs/kit/hooks#transport) hook.
+
+<div class="ts-block">
+
+```dts
+interface Transporter<
+	T = any,
+	U = Exclude<
+		any,
+		false | 0 | '' | null | undefined | typeof NaN
+	>
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+encode: (value: T) => false | U;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+decode: (data: U) => T;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## ValidationError
 
+A validation error thrown by `invalid`.
+
+<div class="ts-block">
+
+```dts
+interface ValidationError {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+issues: StandardSchemaV1.Issue[];
+```
+
+<div class="ts-block-property-details">
+
+The validation issues
+
+</div>
+</div></div>
+
+
+
 ## Private types
+
+The following are referenced by the public types documented above, but cannot be imported directly:
 
 ## AdapterEntry
 
+<div class="ts-block">
+
+```dts
+interface AdapterEntry {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+id: string;
+```
+
+<div class="ts-block-property-details">
+
+A string that uniquely identifies an HTTP service (e.g. serverless function) and is used for deduplication.
+For example, `/foo/a-[b]` and `/foo/[c]` are different routes, but would both
+be represented in a Netlify _redirects file as `/foo/:param`, so they share an ID
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+filter(route: RouteDefinition): boolean;
+```
+
+<div class="ts-block-property-details">
+
+A function that compares the candidate route with the current route to determine
+if it should be grouped with the current route.
+
+Use cases:
+- Fallback pages: `/foo/[c]` is a fallback for `/foo/a-[b]`, and `/[...catchall]` is a fallback for all routes
+- Grouping routes that share a common `config`: `/foo` should be deployed to the edge, `/bar` and `/baz` should be deployed to a serverless function
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+complete(entry: { generateManifest(opts: { relativePath: string }): string }): MaybePromise<void>;
+```
+
+<div class="ts-block-property-details">
+
+A function that is invoked once the entry has been created. This is where you
+should write the function to the filesystem and generate redirect manifests.
+
+</div>
+</div></div>
+
 ## Csp
+
+<div class="ts-block">
+
+```dts
+namespace Csp {
+	type ActionSource = 'strict-dynamic' | 'report-sample';
+	type BaseSource =
+		| 'self'
+		| 'unsafe-eval'
+		| 'unsafe-hashes'
+		| 'unsafe-inline'
+		| 'unsafe-allow-redirects'
+		| 'unsafe-webtransport-hashes'
+		| 'wasm-unsafe-eval'
+		| 'trusted-types-eval'
+		| 'none';
+	type CryptoSource =
+		`${'nonce' | 'sha256' | 'sha384' | 'sha512'}-${string}`;
+	type FrameSource =
+		| HostSource
+		| SchemeSource
+		| 'self'
+		| 'none';
+	type HostNameScheme = `${string}.${string}` | 'localhost';
+	type HostSource =
+		`${HostProtocolSchemes}${HostNameScheme}${PortScheme}`;
+	type HostProtocolSchemes = `${string}://` | '';
+	type HttpDelineator = '/' | '?' | '#' | '\\';
+	type PortScheme = `:${number}` | '' | ':*';
+	type SchemeSource =
+		| 'http:'
+		| 'https:'
+		| 'ws:'
+		| 'wss:'
+		| 'data:'
+		| 'mediastream:'
+		| 'blob:'
+		| 'filesystem:'
+		| (`${string}:` & {});
+	type Source =
+		| HostSource
+		| SchemeSource
+		| CryptoSource
+		| BaseSource;
+	type Sources = Source[];
+}
+```
+
+</div>
 
 ## CspDirectives
 
+<div class="ts-block">
+
+```dts
+interface CspDirectives {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+'child-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'default-src'?: Array<Csp.Source | Csp.ActionSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'frame-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'worker-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'connect-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'font-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'img-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'manifest-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'media-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'object-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'prefetch-src'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'script-src'?: Array<Csp.Source | Csp.ActionSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'script-src-elem'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'script-src-attr'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'style-src'?: Array<Csp.Source | Csp.ActionSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'style-src-elem'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'style-src-attr'?: Csp.Sources;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'base-uri'?: Array<Csp.Source | Csp.ActionSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+sandbox?: Array<
+| 'allow-downloads-without-user-activation'
+| 'allow-forms'
+| 'allow-modals'
+| 'allow-orientation-lock'
+| 'allow-pointer-lock'
+| 'allow-popups'
+| 'allow-popups-to-escape-sandbox'
+| 'allow-presentation'
+| 'allow-same-origin'
+| 'allow-scripts'
+| 'allow-storage-access-by-user-activation'
+| 'allow-top-navigation'
+| 'allow-top-navigation-by-user-activation'
+>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'form-action'?: Array<Csp.Source | Csp.ActionSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'frame-ancestors'?: Array<Csp.HostSource | Csp.SchemeSource | Csp.FrameSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'navigate-to'?: Array<Csp.Source | Csp.ActionSource>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'report-uri'?: string[];
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'report-to'?: string[];
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'require-trusted-types-for'?: Array<'script'>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'trusted-types'?: Array<'none' | 'allow-duplicates' | '*' | string>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'upgrade-insecure-requests'?: boolean;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'require-sri-for'?: Array<'script' | 'style' | 'script style'>;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">deprecated</span> 
+
+</div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'block-all-mixed-content'?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">deprecated</span> 
+
+</div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+'plugin-types'?: Array<`${string}/${string}` | 'none'>;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">deprecated</span> 
+
+</div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+referrer?: Array<
+| 'no-referrer'
+| 'no-referrer-when-downgrade'
+| 'origin'
+| 'origin-when-cross-origin'
+| 'same-origin'
+| 'strict-origin'
+| 'strict-origin-when-cross-origin'
+| 'unsafe-url'
+| 'none'
+>;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">deprecated</span> 
+
+</div>
+
+</div>
+</div></div>
+
 ## DeepPartial
+
+<div class="ts-block">
+
+```dts
+type DeepPartial<T> = T extends
+	| Record<PropertyKey, unknown>
+	| unknown[]
+	? {
+			[K in keyof T]?: T[K] extends
+				| Record<PropertyKey, unknown>
+				| unknown[]
+				? DeepPartial<T[K]>
+				: T[K];
+		}
+	: T | undefined;
+```
+
+</div>
 
 ## HasNonOptionalBoolean
 
+<div class="ts-block">
+
+```dts
+type HasNonOptionalBoolean<T> =
+	IsAny<T> extends true
+		? never
+		: [T] extends [boolean]
+			? true
+			: T extends Array<infer U>
+				? HasNonOptionalBoolean<U>
+				: T extends Record<string, any>
+					? {
+							[K in keyof T]: HasNonOptionalBoolean<T[K]>;
+						}[keyof T]
+					: never;
+```
+
+</div>
+
 ## HttpMethod
+
+<div class="ts-block">
+
+```dts
+type HttpMethod =
+	| 'GET'
+	| 'HEAD'
+	| 'POST'
+	| 'PUT'
+	| 'DELETE'
+	| 'PATCH'
+	| 'OPTIONS';
+```
+
+</div>
 
 ## IsAny
 
+<div class="ts-block">
+
+```dts
+type IsAny<T> = 0 extends 1 & T ? true : false;
+```
+
+</div>
+
 ## Logger
+
+<div class="ts-block">
+
+```dts
+interface Logger {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(msg: string): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+success(msg: string): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+error(msg: string): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+warn(msg: string): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+minor(msg: string): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+info(msg: string): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## MaybePromise
 
+<div class="ts-block">
+
+```dts
+type MaybePromise<T> = T | Promise<T>;
+```
+
+</div>
+
 ## PrerenderEntryGeneratorMismatchHandler
+
+<div class="ts-block">
+
+```dts
+interface PrerenderEntryGeneratorMismatchHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: { generatedFromId: string; entry: string; matchedId: string; message: string }): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## PrerenderEntryGeneratorMismatchHandlerValue
 
+<div class="ts-block">
+
+```dts
+type PrerenderEntryGeneratorMismatchHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderEntryGeneratorMismatchHandler;
+```
+
+</div>
+
 ## PrerenderHttpErrorHandler
+
+<div class="ts-block">
+
+```dts
+interface PrerenderHttpErrorHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: {
+status: number;
+path: string;
+referrer: string | null;
+referenceType: 'linked' | 'fetched';
+message: string;
+}): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## PrerenderHttpErrorHandlerValue
 
+<div class="ts-block">
+
+```dts
+type PrerenderHttpErrorHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderHttpErrorHandler;
+```
+
+</div>
+
 ## PrerenderInvalidUrlHandler
+
+<div class="ts-block">
+
+```dts
+interface PrerenderInvalidUrlHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: { href: string; referrer: string | null; message: string }): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## PrerenderInvalidUrlHandlerValue
 
+<div class="ts-block">
+
+```dts
+type PrerenderInvalidUrlHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderInvalidUrlHandler;
+```
+
+</div>
+
 ## PrerenderMap
+
+<div class="ts-block">
+
+```dts
+type PrerenderMap = Map<string, PrerenderOption>;
+```
+
+</div>
 
 ## PrerenderMissingIdHandler
 
+<div class="ts-block">
+
+```dts
+interface PrerenderMissingIdHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: { path: string; id: string; referrers: string[]; message: string }): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 ## PrerenderMissingIdHandlerValue
+
+<div class="ts-block">
+
+```dts
+type PrerenderMissingIdHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderMissingIdHandler;
+```
+
+</div>
 
 ## PrerenderOption
 
+<div class="ts-block">
+
+```dts
+type PrerenderOption = boolean | 'auto';
+```
+
+</div>
+
 ## PrerenderUnseenRoutesHandler
+
+<div class="ts-block">
+
+```dts
+interface PrerenderUnseenRoutesHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: { routes: string[]; message: string }): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## PrerenderUnseenRoutesHandlerValue
 
+<div class="ts-block">
+
+```dts
+type PrerenderUnseenRoutesHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderUnseenRoutesHandler;
+```
+
+</div>
+
 ## Prerendered
+
+<div class="ts-block">
+
+```dts
+interface Prerendered {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+pages: Map<
+string,
+{
+	/** The location of the .html file relative to the output directory */
+	file: string;
+}
+>;
+```
+
+<div class="ts-block-property-details">
+
+A map of `path` to `{ file }` objects, where a path like `/foo` corresponds to `foo.html` and a path like `/bar/` corresponds to `bar/index.html`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+assets: Map<
+string,
+{
+	/** The MIME type of the asset */
+	type: string;
+}
+>;
+```
+
+<div class="ts-block-property-details">
+
+A map of `path` to `{ type }` objects.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+redirects: Map<
+string,
+{
+	status: number;
+	location: string;
+}
+>;
+```
+
+<div class="ts-block-property-details">
+
+A map of redirects encountered during prerendering.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+paths: string[];
+```
+
+<div class="ts-block-property-details">
+
+An array of prerendered paths (without trailing slashes, regardless of the trailingSlash config)
+
+</div>
+</div></div>
 
 ## RequestOptions
 
+<div class="ts-block">
+
+```dts
+interface RequestOptions {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+getClientAddress(): string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+platform?: App.Platform;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 ## RouteSegment
 
+<div class="ts-block">
+
+```dts
+interface RouteSegment {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+content: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+dynamic: boolean;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+rest: boolean;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 ## TrailingSlash
+
+<div class="ts-block">
+
+```dts
+type TrailingSlash = 'never' | 'always' | 'ignore';
+```
+
+</div>

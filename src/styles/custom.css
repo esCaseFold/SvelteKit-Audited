@@ -38,3 +38,32 @@
 .sl-search * {
   font-family: var(--content-font);
 }
+
+/* Adding external icon to external links */
+.sl-markdown-content a[href^="http"]::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.25em;
+  vertical-align: text-bottom;
+
+  background-color: currentColor;
+
+  -webkit-mask-image: url("/public/external-icon.svg");
+  mask-image: url("/public/external-icon.svg");
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: contain;
+  mask-size: contain;
+
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/*Disabling copy button via code block class*/
+.no-copy .copy {
+  display: none !important;
+}

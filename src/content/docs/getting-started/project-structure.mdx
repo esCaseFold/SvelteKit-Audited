@@ -14,12 +14,12 @@ A typical SvelteKit project looks like this:
   - src/
     - lib/
       - server/
-        - `[your server-only lib files]`
-      - `[your lib files]`
+        - ... [your server-only lib files]
+      - ... [your lib files]
       - params/
-        - `[your param matchers]`
+        - ... [your param matchers]
       - routes/
-        - `[your routes]`
+        - ... [your routes]
     - app.html
     - error.html
     - hooks.client.js
@@ -27,9 +27,9 @@ A typical SvelteKit project looks like this:
     - service-worker.js
     - instrumentation.server.js
   - static/
-    - `[your static assets]`
+    - ... [your static assets]
   - tests/
-    - `[your tests]`
+    - ... [your tests]
   - package.json
   - svelte.config.js
   - tsconfig.json
@@ -39,7 +39,7 @@ A typical SvelteKit project looks like this:
 
 You'll also find common files like `.gitignore` and `.npmrc` (and `.prettierrc` and `eslint.config.js` and so on, if you chose those options when running `npx sv create`).
 
-## Project files
+## Project Files
 
 ### src
 
@@ -95,7 +95,7 @@ This file (or `jsconfig.json`, if you prefer type-checked `.js` files over `.ts`
 
 A SvelteKit project is really just a [Vite](https://vitejs.dev) project that uses the [`@sveltejs/kit/vite`](https://svelte.dev/docs/kit/@sveltejs-kit-vite) plugin, along with any other [Vite configuration](https://vitejs.dev/config/).
 
-## Other files
+## Other Files
 
 ### .svelte-kit
 
