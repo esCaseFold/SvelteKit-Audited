@@ -10,7 +10,7 @@ export default defineConfig({
 		starlight({
 			title: 'SvelteKit Docs Audited',
 			favicon: './svelte-logo.png',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/esCaseFold/SvelteKit-Audited' }],
       		logo: {
         		src: './src/assets/svelte-logo.png',
       		},

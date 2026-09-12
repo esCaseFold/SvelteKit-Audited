@@ -1,20 +1,30 @@
 ---
 import Header from '@astrojs/starlight/components/Header.astro';
 import FontToggle from './FontToggle.astro';
-// I can't figure out how to get the FontToggle component to show up in the header, so I just put it in a div and positioned it with absolute positioning. I think this is a hacky solution, but it works for now.
+const isHomePage =
+Astro.url.pathname === '/' ||
+Astro.url.pathname === '/index.html';
 ---
 
-<div style="position: relative;">
+<div class="header-wrapper">
   <Header />
-  <div
-    style="
-      position:absolute;
-      top:50%;
-      right:10%;
-      transform:translateY(-50%);
-      z-index:50;
-    "
-  >
-    <FontToggle />
-  </div>
+
+  {!isHomePage && (
+    <div class="font-toggle-container">
+      <FontToggle />
+    </div>
+  )}
 </div>
+
+<style>
+  .header-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .font-toggle-container {
+    justify-self: end;
+    margin-right: 1rem;
+  }
+</style>
