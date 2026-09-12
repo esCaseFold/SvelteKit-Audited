@@ -11,7 +11,7 @@ When you create a new SvelteKit project with `npx sv create`, it installs [`adap
 - [`@sveltejs/adapter-vercel`](https://svelte.dev/docs/kit/adapter-vercel) for [Vercel](https://vercel.com/)
 - [`svelte-adapter-azure-swa`](https://github.com/geoffrich/svelte-adapter-azure-swa) for [Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/)
 - [`svelte-kit-sst`](https://github.com/sst/v2/tree/master/packages/svelte-kit-sst) for [AWS via SST](https://sst.dev/docs/start/aws/svelte)
-- [`@sveltejs/adapter-node`](/build-and-deploy/adapter-node) for [Google Cloud Run](https://cloud.google.com/run)
+- [`@sveltejs/adapter-node`](/SvelteKit-Audited/build-and-deploy/adapter-node) for [Google Cloud Run](https://cloud.google.com/run)
 
 It's recommended to install the appropriate adapter to your `devDependencies` once you've settled on a target environment, since this will add the adapter to your lockfile and slightly improve install times on CI.
 

@@ -7,7 +7,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import { Aside } from '@astrojs/starlight/components';
 import { Icon } from '@astrojs/starlight/components';
 
-Before a [`+page.svelte`](/core-concepts/routing/#pagesvelte) component (and its containing [`+layout.svelte`](/core-concepts/routing/#layoutsvelte) components) can be rendered, we often need to get some data. This is done by defining `load` functions.
+Before a [`+page.svelte`](/SvelteKit-Audited/core-concepts/routing/#pagesvelte) component (and its containing [`+layout.svelte`](/SvelteKit-Audited/core-concepts/routing/#layoutsvelte) components) can be rendered, we often need to get some data. This is done by defining `load` functions.
 
 ## Page Data
 A `+page.svelte` file can have a sibling `+page.js` that exports a load function, the return value of which is available to the page via the `data` prop:
@@ -98,7 +98,7 @@ In Svelte 4, you’d use `export let data` instead.
 
 Thanks to the generated `$types` module, we get full type safety.
 
-A load function in a `+page.js` file runs both on the server and in the browser (unless combined with export const ssr = false, in which case it will [only run in the browser](/core-concepts/page-options#ssr)). If your load function should always run on the server (because it uses private environment variables, for example, or accesses a database) then it would go in a +page.server.js instead.
+A load function in a `+page.js` file runs both on the server and in the browser (unless combined with export const ssr = false, in which case it will [only run in the browser](/SvelteKit-Audited/core-concepts/page-options#ssr)). If your load function should always run on the server (because it uses private environment variables, for example, or accesses a database) then it would go in a +page.server.js instead.
 
 A more realistic version of your blog post’s `load` function, that only runs on the server and pulls data from a database, might look like this:
 
@@ -355,11 +355,11 @@ Conceptually, they're the same thing, but there are some important differences t
 
 Server `load` functions _always_ run on the server.
 
-By default, universal `load` functions run on the server during SSR when the user first visits your page. They will then run again during hydration, reusing any responses from [fetch requests](#making-fetch-requests). All subsequent invocations of universal `load` functions happen in the browser. You can customize the behavior through [page options](/core-concepts/page-options). If you disable [server-side rendering](/core-concepts/page-options#ssr), you'll get an SPA and universal `load` functions _always_ run on the client.
+By default, universal `load` functions run on the server during SSR when the user first visits your page. They will then run again during hydration, reusing any responses from [fetch requests](#making-fetch-requests). All subsequent invocations of universal `load` functions happen in the browser. You can customize the behavior through [page options](/SvelteKit-Audited/core-concepts/page-options). If you disable [server-side rendering](/SvelteKit-Audited/core-concepts/page-options#ssr), you'll get an SPA and universal `load` functions _always_ run on the client.
 
 If a route contains both universal and server `load` functions, the server `load` runs first.
 
-A `load` function is invoked at runtime, unless you [prerender](/core-concepts/page-options#prerender) the page — in that case, it's invoked at build time.
+A `load` function is invoked at runtime, unless you [prerender](/SvelteKit-Audited/core-concepts/page-options#prerender) the page — in that case, it's invoked at build time.
 
 ### Input
 
@@ -373,7 +373,7 @@ Universal `load` functions are called with a `LoadEvent`, which has a `data` pro
 
 A universal `load` function can return an object containing any values, including things like custom classes and component constructors.
 
-A server `load` function must return data that can be serialized with [devalue](https://github.com/rich-harris/devalue) — anything that can be represented as JSON plus things like `BigInt`, `Date`, `Map`, `Set` and `RegExp`, or repeated/cyclical references — so that it can be transported over the network. Your data can include [promises](#streaming-with-promises), in which case it will be streamed to browsers. If you need to serialize/deserialize custom types, use [transport hooks](/advanced/hooks#transport).
+A server `load` function must return data that can be serialized with [devalue](https://github.com/rich-harris/devalue) — anything that can be represented as JSON plus things like `BigInt`, `Date`, `Map`, `Set` and `RegExp`, or repeated/cyclical references — so that it can be transported over the network. Your data can include [promises](#streaming-with-promises), in which case it will be streamed to browsers. If you need to serialize/deserialize custom types, use [transport hooks](/SvelteKit-Audited/advanced/hooks#transport).
 
 ### When to use which
 
@@ -493,7 +493,7 @@ To get data from an external API or a `+server.js` handler, you can use the prov
 - It can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers for the page request.
 - It can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context).
 - Internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call.
-- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text`, `json` and `arrayBuffer` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/advanced/hooks#handle).
+- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text`, `json` and `arrayBuffer` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/SvelteKit-Audited/advanced/hooks#handle).
 - During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request - if you received a warning in your browser console when using the browser `fetch` instead of the `load` `fetch`, this is why.
 
 <Tabs syncKey="languages">
@@ -526,7 +526,7 @@ To get data from an external API or a `+server.js` handler, you can use the prov
 
 ## Cookies
 
-A server `load` function can get and set [`cookies`](/reference/@sveltejs-kit#cookies).
+A server `load` function can get and set [`cookies`](/SvelteKit-Audited/reference/@sveltejs-kit#cookies).
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -569,7 +569,7 @@ For example, if SvelteKit is serving my.domain.com:
 - api.domain.com WILL NOT receive cookies
 - sub.my.domain.com WILL receive cookies
 
-Other cookies will not be passed when `credentials: 'include'` is set, because SvelteKit does not know which domain which cookie belongs to (the browser does not pass this information along), so it's not safe to forward any of them. Use the [handleFetch hook](/advanced/hooks#handleFetch) to work around it.
+Other cookies will not be passed when `credentials: 'include'` is set, because SvelteKit does not know which domain which cookie belongs to (the browser does not pass this information along), so it's not safe to forward any of them. Use the [handleFetch hook](/SvelteKit-Audited/advanced/hooks#handleFetch) to work around it.
 
 ## Headers
 
@@ -768,7 +768,7 @@ Take care not to introduce waterfalls when using `await parent()`. Here, for exa
 
 ## Errors
 
-If an error is thrown during `load`, the nearest [`+error.svelte`](/core-concepts/routing#error) will be rendered. For [_expected_](/advanced/errors#expected-errors) errors, use the `error` helper from `@sveltejs/kit` to specify the HTTP status code and an optional message:
+If an error is thrown during `load`, the nearest [`+error.svelte`](/SvelteKit-Audited/core-concepts/routing#error) will be rendered. For [_expected_](/SvelteKit-Audited/advanced/errors#expected-errors) errors, use the `error` helper from `@sveltejs/kit` to specify the HTTP status code and an optional message:
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -809,10 +809,10 @@ If an error is thrown during `load`, the nearest [`+error.svelte`](/core-concept
 
 Calling `error(...)` will throw an exception, making it easy to stop execution from inside helper functions.
 
-If an [_unexpected_](/advanced/errors#unexpected-errors) error is thrown, SvelteKit will invoke [`handleError`](/advanced/hooks#handleerror) and treat it as a 500 Internal Error.
+If an [_unexpected_](/SvelteKit-Audited/advanced/errors#unexpected-errors) error is thrown, SvelteKit will invoke [`handleError`](/SvelteKit-Audited/advanced/hooks#handleerror) and treat it as a 500 Internal Error.
 
 <Aside type="note" title="Previous Version Note">
-[In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the error yourself
+[In SvelteKit 1.x](/SvelteKit-Audited/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the error yourself
 </Aside>
 
 ## Redirects
@@ -855,7 +855,7 @@ Don't use `redirect()` inside a `try {...}` block, as the redirect will immediat
 In the browser, you can also navigate programmatically outside of a `load` function using [`goto`](https://svelte.dev/docs/kit/$app-navigation#goto) from [`$app.navigation`](https://svelte.dev/docs/kit/$app-navigation).
 
 <Aside type="note" title="Previous Version Note">
-[In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the `redirect` yourself
+[In SvelteKit 1.x](/SvelteKit-Audited/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the `redirect` yourself
 </Aside>
 
 ## Streaming with Promises
@@ -995,7 +995,7 @@ The headers and status code of a response cannot be changed once the response ha
 :::
 
 <Aside type="note" title="Previous Version Note">
-[In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#top-level-promises-are-no-longer-awaited) top-level promises were automatically awaited, only nested promises were streamed.
+[In SvelteKit 1.x](/SvelteKit-Audited/appendix/migrating-to-sveltekit-v2/#top-level-promises-are-no-longer-awaited) top-level promises were automatically awaited, only nested promises were streamed.
 </Aside>
 
 ## Parallel Loading
@@ -1205,10 +1205,10 @@ To summarize, a `load` function will rerun in the following situations:
 - It calls `url.searchParams.get(...)`, `url.searchParams.getAll(...)` or `url.searchParams.has(...)` and the parameter in question changes. Accessing other properties of `url.searchParams` will have the same effect as accessing `url.search`.
 - It calls `await parent()` and a parent `load` function reran
 - A child `load` function calls `await parent()` and is rerunning, and the parent is a server load function
-- It declared a dependency on a specific URL via [`fetch`](#making-fetch-requests) (universal load only) or [`depends`](/reference/@sveltejs-kit/#loadevent), and that URL was marked invalid with [`invalidate(url)`](https://svelte.dev/docs/kit/$app-navigation#invalidate)
+- It declared a dependency on a specific URL via [`fetch`](#making-fetch-requests) (universal load only) or [`depends`](/SvelteKit-Audited/reference/@sveltejs-kit/#loadevent), and that URL was marked invalid with [`invalidate(url)`](https://svelte.dev/docs/kit/$app-navigation#invalidate)
 - All active `load` functions were forcibly rerun with [`invalidateAll()`](https://svelte.dev/docs/kit/$app-navigation#invalidateAll)
 
-`params` and `url` can change in response to a `<a href="..">` link click, a [`<form>` interaction](/core-concepts/form-actions/#get-vs-post), a [`goto`](https://svelte.dev/docs/kit/$app-navigation#goto) invocation, or a [`redirect`](/reference/@sveltejs-kit/#redirect-1).
+`params` and `url` can change in response to a `<a href="..">` link click, a [`<form>` interaction](/SvelteKit-Audited/core-concepts/form-actions/#get-vs-post), a [`goto`](https://svelte.dev/docs/kit/$app-navigation#goto) invocation, or a [`redirect`](/SvelteKit-Audited/reference/@sveltejs-kit/#redirect-1).
 
 Note that rerunning a `load` function will update the `data` prop inside the corresponding `+layout.svelte` or `+page.svelte`; it does _not_ cause the component to be recreated. As a result, internal state is preserved. If this isn't what you want, you can reset whatever you need to reset inside an [`afterNavigate`](https://svelte.dev/docs/kit/$app-navigation#afterNavigate) callback, and/or wrap your component in a [`{#key ...}`](https://svelte.dev/docs/svelte/key) block.
 
@@ -1221,7 +1221,7 @@ A couple features of loading data have important implications for auth checks:
 There are a few possible strategies to ensure an auth check occurs before protected code.
 
 To prevent data waterfalls and preserve layout `load` caches:
-- Use [hooks](/advanced/hooks) to protect multiple routes before any `load` functions run
+- Use [hooks](/SvelteKit-Audited/advanced/hooks) to protect multiple routes before any `load` functions run
 - Use auth guards directly in `+page.server.js` `load` functions for route specific protection
 
 Putting an auth guard in `+layout.server.js` requires all child pages to call `await parent()` before protected code. Unless every child page depends on returned data from `await parent()`, the other options will be more performant.
@@ -1252,7 +1252,7 @@ export function requireLogin() {
 	return locals.user;
 }
 ```
-Now, you can call `requireLogin` in any `load` function (or [form action](/core-concepts/form-actions), for example) to guarantee that the user is logged in:
+Now, you can call `requireLogin` in any `load` function (or [form action](/SvelteKit-Audited/core-concepts/form-actions), for example) to guarantee that the user is logged in:
 
 ```js
 // +page.server.js

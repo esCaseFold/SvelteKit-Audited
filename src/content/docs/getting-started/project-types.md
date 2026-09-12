@@ -6,7 +6,7 @@ sidebar:
 ---
 SvelteKit offers configurable rendering, which allows you to build and deploy your project in several different ways. You can build all of the below types of applications and more with SvelteKit. Rendering settings are not mutually exclusive and you may choose the optimal manner with which to render different parts of your application.
 
-If you don't have a particular way you'd like to build your application in mind, don't worry! The way your application is built, deployed, and rendered is controlled by which adapter you've chosen and a small amount of configuration and these can always be changed later. The [project structure](/getting-started/project-structure) and [routing](https://svelte.dev/docs/kit/glossary#Routing) will be the same regardless of the project type that you choose.
+If you don't have a particular way you'd like to build your application in mind, don't worry! The way your application is built, deployed, and rendered is controlled by which adapter you've chosen and a small amount of configuration and these can always be changed later. The [project structure](/SvelteKit-Audited/getting-started/project-structure) and [routing](https://svelte.dev/docs/kit/glossary#Routing) will be the same regardless of the project type that you choose.
 
 ## Default Rendering
 
@@ -14,7 +14,7 @@ By default, when a user visits a site, SvelteKit will render the first page with
 
 ## Static Site Generation
 
-You can use SvelteKit as a [static site generator (SSG)](https://svelte.dev/docs/kit/glossary#SSG) that fully [prerenders](https://svelte.dev/docs/kit/glossary#Prerendering) your site with static rendering using [`adapter-static`](/build-and-deploy/adapter-static). You may also use [the prerender option](/core-concepts/page-options#prerender) to prerender only some pages and then choose a different adapter with which to dynamically server-render other pages.
+You can use SvelteKit as a [static site generator (SSG)](https://svelte.dev/docs/kit/glossary#SSG) that fully [prerenders](https://svelte.dev/docs/kit/glossary#Prerendering) your site with static rendering using [`adapter-static`](/SvelteKit-Audited/build-and-deploy/adapter-static). You may also use [the prerender option](/SvelteKit-Audited/core-concepts/page-options#prerender) to prerender only some pages and then choose a different adapter with which to dynamically server-render other pages.
 
 Tools built solely to do static site generation may scale the prerendering process more efficiently during build when rendering a very large number of pages. When working with very large statically generated sites, you can avoid long build times with [Incremental Static Regeneration (ISR) if using `adapter-vercel`](https://svelte.dev/docs/kit/adapter-vercel#Incremental-Static-Regeneration). And in contrast to purpose-built SSGs, SvelteKit allows for nicely mixing and matching different rendering types on different pages.
 
@@ -24,7 +24,7 @@ Tools built solely to do static site generation may scale the prerendering proce
 
 ## Multi-page App
 
-SvelteKit isn't typically used to build [traditional multi-page apps](https://svelte.dev/docs/kit/glossary#MPA). However, you can use [`data-sveltekit-reload`](/advanced/link-options#data-sveltekit-reload) to render all links on the server with `<body data-sveltekit-reload>` or specific links by placing it somewhere more specific. This does not remove the client-side router, but if you don't need JavaScript on a page you can remove all JavaScript on the page with [`csr = false`](/core-concepts/page-options#csr), which will also render any links on the server when clicked.
+SvelteKit isn't typically used to build [traditional multi-page apps](https://svelte.dev/docs/kit/glossary#MPA). However, you can use [`data-sveltekit-reload`](/SvelteKit-Audited/advanced/link-options#data-sveltekit-reload) to render all links on the server with `<body data-sveltekit-reload>` or specific links by placing it somewhere more specific. This does not remove the client-side router, but if you don't need JavaScript on a page you can remove all JavaScript on the page with [`csr = false`](/SvelteKit-Audited/core-concepts/page-options#csr), which will also render any links on the server when clicked.
 
 ## Separate Backend
 
@@ -38,11 +38,11 @@ SvelteKit apps are simple to run on serverless platforms. [The default zero conf
 
 ## Your Own Server
 
-You can deploy to your own server or VPS using [`adapter-node`](/build-and-deploy/adapter-node/).
+You can deploy to your own server or VPS using [`adapter-node`](/SvelteKit-Audited/build-and-deploy/adapter-node/).
 
 ## Container
 
-You can use [`adapter-node`](/build-and-deploy/adapter-node) to run a SvelteKit app within a container such as Docker or LXC.
+You can use [`adapter-node`](/SvelteKit-Audited/build-and-deploy/adapter-node) to run a SvelteKit app within a container such as Docker or LXC.
 
 ## Library
 
@@ -64,7 +64,7 @@ You can turn a [SvelteKit SPA](https://svelte.dev/docs/kit/single-page-apps) int
 
 ## Browser Rxtension
 
-You can build browser extensions using either [`adapter-static`](/build-and-deploy/adapter-static) or [community adapters](https://svelte.dev/packages#sveltekit-adapters) specifically tailored towards browser extensions.
+You can build browser extensions using either [`adapter-static`](/SvelteKit-Audited/build-and-deploy/adapter-static) or [community adapters](https://svelte.dev/packages#sveltekit-adapters) specifically tailored towards browser extensions.
 
 ## Embedded Device
 

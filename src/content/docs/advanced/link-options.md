@@ -7,7 +7,7 @@ In SvelteKit, `<a>` elements (rather than framework-specific `<Link>` components
 
 You can customise the behaviour of links with `data-sveltekit-*` attributes. These can be applied to the `<a>` itself, or to a parent element.
 
-These options also apply to `<form>` elements with [`method="GET"`](/core-concepts/form-actions/#get-vs-post).
+These options also apply to `<form>` elements with [`method="GET"`](/SvelteKit-Audited/core-concepts/form-actions/#get-vs-post).
 
 ## data-sveltekit-preload-data
 
@@ -70,7 +70,7 @@ Occasionally, we need to tell SvelteKit not to handle a link, but allow the brow
 
 ...will cause a full-page navigation when the link is clicked.
 
-Links with a `rel="external"` attribute will receive the same treatment. In addition, they will be ignored during [prerendering](/core-concepts/page-options#prerender).
+Links with a `rel="external"` attribute will receive the same treatment. In addition, they will be ignored during [prerendering](/SvelteKit-Audited/core-concepts/page-options#prerender).
 
 ## data-sveltekit-replacestate
 
@@ -84,7 +84,7 @@ Sometimes you don't want navigation to create a new entry in the browser's sessi
 
 ## data-sveltekit-keepfocus
 
-Sometimes you don't want [focus to be reset](/best-practices/accessiblity#focus-management) after navigation. For example, maybe you have a search form that submits as the user is typing, and you want to keep focus on the text input.  Adding a `data-sveltekit-keepfocus` attribute to it...
+Sometimes you don't want [focus to be reset](/SvelteKit-Audited/best-practices/accessiblity#focus-management) after navigation. For example, maybe you have a search form that submits as the user is typing, and you want to keep focus on the text input.  Adding a `data-sveltekit-keepfocus` attribute to it...
 
 ```html
 <form data-sveltekit-keepfocus>

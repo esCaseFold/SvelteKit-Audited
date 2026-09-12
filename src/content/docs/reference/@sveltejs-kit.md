@@ -204,7 +204,7 @@ Create a `Response` object from the supplied body.
 function text(body: string, init?: ResponseInit): Response;
 ```
 ## Action
-Shape of a form action method that is part of `export const actions = {...}` in `+page.server.js`. See [form actions](/core-concepts/form-actions/) for more information.
+Shape of a form action method that is part of `export const actions = {...}` in `+page.server.js`. See [form actions](/SvelteKit-Audited/core-concepts/form-actions/) for more information.
 ```js
 type Action<
 	Params extends AppLayoutParams<'/'> =
@@ -270,7 +270,7 @@ type Actions<
 ## Adapter
 Figure out how to do a good line indent OR come up with a better organization than this shit!
 
-[Adapters](/build-and-deploy/adapters) are responsible for taking the production build and turning it into something that can be deployed to a platform of your choosing.
+[Adapters](/SvelteKit-Audited/build-and-deploy/adapters) are responsible for taking the production build and turning it into something that can be deployed to a platform of your choosing.
 ```js
 interface Adapter {…}
 ```
@@ -510,7 +510,7 @@ Compress files in `directory` with gzip and brotli, where appropriate. Generates
 :::note
 AVAILABLE SINCE 2.10.0
 :::
-The [`init`](slug:advanced/hooks) will be invoked once the app starts in the browser
+The [`init`](/SvelteKit-Audited/advanced/hooks) will be invoked once the app starts in the browser
 ```js
 type ClientInit = () => MaybePromise<void>;
 ```
@@ -595,7 +595,7 @@ platform?(details: { config: any; prerender: PrerenderOption }): MaybePromise<Ap
 A function that is called with the current route config and prerender option and returns an App.Platform object
 
 ## EnvVarConfig
-[Environment variables](https://svelte.dev/docs/kit/environment-variables) can be configured by exporting a `variables` object from `src/env.ts`, using [`defineEnvVars`](/reference/sveltejs-kit-env/#defineenvvars).
+[Environment variables](https://svelte.dev/docs/kit/environment-variables) can be configured by exporting a `variables` object from `src/env.ts`, using [`defineEnvVars`](/SvelteKit-Audited/reference/sveltejs-kit-env/#defineenvvars).
 
 ```js
 interface EnvVarConfig<T> {…}
@@ -633,8 +633,8 @@ A description of the variable that will be used for inline documentation on hove
 
 ## Handle
 
-The [`handle`](/advanced/hooks#handle) hook runs every time the SvelteKit server receives a [request](/getting-started/web-standards#request) and
-determines the [response](/getting-started/web-standards#response).
+The [`handle`](/SvelteKit-Audited/advanced/hooks#handle) hook runs every time the SvelteKit server receives a [request](/getting-started/web-standards#request) and
+determines the [response](/SvelteKit-Audited/getting-started/web-standards#response).
 It receives an `event` object representing the request and a function called `resolve`, which renders the route and generates a `Response`.
 This allows you to modify response headers or bodies, or bypass SvelteKit entirely (for implementing routes programmatically, for example).
 
@@ -651,7 +651,7 @@ type Handle = (input: {
 
 ## HandleClientError
 
-The client-side [`handleError`](/advanced/hooks#handleError) hook runs when an unexpected error is thrown while navigating.
+The client-side [`handleError`](/SvelteKit-Audited/advanced/hooks#handleError) hook runs when an unexpected error is thrown while navigating.
 
 If an unexpected error is thrown during loading or the following render, this function will be called with the error and the event.
 Make sure that this function *never* throws an error.
@@ -667,7 +667,7 @@ type HandleClientError = (input: {
 
 ## HandleFetch
 
-The [`handleFetch`](/advanced/hooks#handleFetch) hook allows you to modify (or replace) the result of an [`event.fetch`](/core-concept/loading-data#making-fetch-requests) call that runs on the server (or during prerendering) inside an endpoint, `load`, `action`, `handle`, `handleError` or `reroute`.
+The [`handleFetch`](/SvelteKit-Audited/advanced/hooks#handleFetch) hook allows you to modify (or replace) the result of an [`event.fetch`](/SvelteKit-Audited/core-concept/loading-data#making-fetch-requests) call that runs on the server (or during prerendering) inside an endpoint, `load`, `action`, `handle`, `handleError` or `reroute`.
 
 ```js
 type HandleFetch = (input: {
@@ -679,7 +679,7 @@ type HandleFetch = (input: {
 
 ## HandleServerError
 
-The server-side [`handleError`](/advanced/hooks#handleError) hook runs when an unexpected error is thrown while responding to a request.
+The server-side [`handleError`](/SvelteKit-Audited/advanced/hooks#handleError) hook runs when an unexpected error is thrown while responding to a request.
 
 If an unexpected error is thrown during loading or rendering, this function will be called with the error and the event.
 Make sure that this function _never_ throws an error.
@@ -695,7 +695,7 @@ type HandleServerError = (input: {
 
 ## HandleValidationError
 
-The [`handleValidationError`](/advanced/hooks#handleValidationError) hook runs when the argument to a remote function fails validation.
+The [`handleValidationError`](/SvelteKit-Audited/advanced/hooks#handleValidationError) hook runs when the argument to a remote function fails validation.
 
 It will be called with the validation issues and the event, and must return an object shape that matches `App.Error`.
 
@@ -881,10 +881,10 @@ fetch: typeof fetch;
 - It can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers for the page request.
 - It can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context).
 - Internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call.
-- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/advanced/hooks#handle)
+- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/SvelteKit-Audited/advanced/hooks#handle)
 - During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request.
 
-You can learn more about making credentialed requests with cookies [here](/core-concepts/loading-data/#cookies)
+You can learn more about making credentialed requests with cookies [here](/SvelteKit-Audited/core-concepts/loading-data/#cookies)
 
 <div class="no-copy">
 
@@ -924,7 +924,7 @@ export async function load({ fetch, setHeaders }) {
 
 Setting the same header multiple times (even in separate `load` functions) is an error — you can only set a given header once.
 
-You cannot add a `set-cookie` header with `setHeaders` — use the [`cookies`](/reference/@sveltejs-kit#cookies) API in a server-only `load` function instead.
+You cannot add a `set-cookie` header with `setHeaders` — use the [`cookies`](/SvelteKit-Audited/reference/@sveltejs-kit#cookies) API in a server-only `load` function instead.
 
 `setHeaders` has no effect when a `load` function runs in the browser.
 
@@ -1642,7 +1642,7 @@ type OnNavigate = Navigation & {
 
 ## Page
 
-The shape of the [`page`](/docs/kit/$app-state#page) reactive object and the [`$page`](/docs/kit/$app-stores) store.
+The shape of the [`page`](https://svelte.dev/docs/kit/$app-state#page) reactive object and the [`$page`](https://svelte.dev/docs/kit/$app-stores) store.
 
 <div class="ts-block">
 
@@ -1753,7 +1753,7 @@ state: App.PageState;
 
 <div class="ts-block-property-details">
 
-The page state, which can be manipulated using the [`pushState`](/docs/kit/$app-navigation#pushState) and [`replaceState`](/docs/kit/$app-navigation#replaceState) functions from `$app/navigation`.
+The page state, which can be manipulated using the [`pushState`](https://svelte.dev/docs/kit/$app-navigation#pushState) and [`replaceState`](https://svelte.dev/docs/kit/$app-navigation#replaceState) functions from `$app/navigation`.
 
 </div>
 </div>
@@ -1766,14 +1766,14 @@ form: any;
 
 <div class="ts-block-property-details">
 
-Filled only after a form submission. See [form actions](/docs/kit/form-actions) for more info.
+Filled only after a form submission. See [form actions](/SvelteKit-Audited/core-concepts/form-actions) for more info.
 
 </div>
 </div></div>
 
 ## ParamMatcher
 
-The shape of a param matcher. See [matching](/docs/kit/advanced-routing#Matching) for more info.
+The shape of a param matcher. See [matching](/SvelteKit-Audited/advanced/advanced-routing/#matching) for more info.
 
 <div class="ts-block">
 
@@ -2343,7 +2343,7 @@ fetch: typeof fetch;
 - During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/advanced/hooks#handle)
 - During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request.
 
-You can learn more about making credentialed requests with cookies [here](/core-concepts/loading-data#cookies).
+You can learn more about making credentialed requests with cookies [here](/SvelteKit-Audited/core-concepts/loading-data#cookies).
 
 <div class="no-copy">
 

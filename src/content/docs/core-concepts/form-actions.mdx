@@ -369,7 +369,7 @@ The returned data must be serializable as JSON. Beyond that, the structure is en
 
 ### Redirects
 
-Redirects (and errors) work exactly the same as in [`load`](/core-concepts/loading-data/#redirects):
+Redirects (and errors) work exactly the same as in [`load`](/SvelteKit-Audited/core-concepts/loading-data/#redirects):
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -752,7 +752,7 @@ const response = await fetch(this.action, {
 
 ## Alternatives
 
-Form actions are the preferred way to send data to the server, since they can be progressively enhanced, but you can also use [`+server.js`](routing#server) files to expose (for example) a JSON API. Here's how such an interaction could look like:
+Form actions are the preferred way to send data to the server, since they can be progressively enhanced, but you can also use [`+server.js`](/SvelteKit-Audited/core-concepts/routing#server) files to expose (for example) a JSON API. Here's how such an interaction could look like:
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -821,7 +821,7 @@ Some forms don't need to `POST` data to the server — search inputs, for exampl
 </form>
 ```
 
-Submitting this form will navigate to `/search?q=...` and invoke your load function but will not invoke an action. As with `<a>` elements, you can set the [`data-sveltekit-reload`](/advanced/link-options/#data-sveltekit-reload), [`data-sveltekit-replacestate`](/advanced/link-options/#data-sveltekit-replacestate), [`data-sveltekit-keepfocus`](/advanced/link-options/#data-sveltekit-keepfocus) and [`data-sveltekit-noscroll`](/advanced/link-options/#data-sveltekit-noscroll) attributes on the `<form>` to control the router's behaviour.
+Submitting this form will navigate to `/search?q=...` and invoke your load function but will not invoke an action. As with `<a>` elements, you can set the [`data-sveltekit-reload`](/SvelteKit-Audited/advanced/link-options/#data-sveltekit-reload), [`data-sveltekit-replacestate`](/SvelteKit-Audited/advanced/link-options/#data-sveltekit-replacestate), [`data-sveltekit-keepfocus`](/SvelteKit-Audited/advanced/link-options/#data-sveltekit-keepfocus) and [`data-sveltekit-noscroll`](/SvelteKit-Audited/advanced/link-options/#data-sveltekit-noscroll) attributes on the `<form>` to control the router's behaviour.
 
 ## Further Reading
 

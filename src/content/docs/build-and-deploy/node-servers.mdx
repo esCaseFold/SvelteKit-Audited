@@ -100,7 +100,7 @@ PROTOCOL_HEADER=x-forwarded-proto HOST_HEADER=x-forwarded-host node build
 If you're hosting your proxy on a non-standard port and your reverse proxy supports `x-forwarded-port`, you can also set `PORT_HEADER=x-forwarded-port`.
 :::
 
-If `adapter-node` can't correctly determine the URL of your deployment, you may experience this error when using [form actions](/core-concepts/form-actions):
+If `adapter-node` can't correctly determine the URL of your deployment, you may experience this error when using [form actions](/SvelteKit-Audited/core-concepts/form-actions):
 
 :::note
 Cross-site `POST` form submissions are forbidden
@@ -108,7 +108,7 @@ Cross-site `POST` form submissions are forbidden
 
 ### `ADDRESS_HEADER` and `XFF_DEPTH`
 
-The [`RequestEvent`](/reference/@sveltejs-kit#requestevent) object passed to hooks and endpoints includes an `event.getClientAddress()` function that returns the client's IP address. By default this is the connecting `remoteAddress`. If your server is behind one or more proxies (such as a load balancer), this value will contain the innermost proxy's IP address rather than the client's, so we need to specify an `ADDRESS_HEADER` to read the address from:
+The [`RequestEvent`](/SvelteKit-Audited/reference/@sveltejs-kit#requestevent) object passed to hooks and endpoints includes an `event.getClientAddress()` function that returns the client's IP address. By default this is the connecting `remoteAddress`. If your server is behind one or more proxies (such as a load balancer), this value will contain the innermost proxy's IP address rather than the client's, so we need to specify an `ADDRESS_HEADER` to read the address from:
 
 ```sh
 ADDRESS_HEADER=True-Client-IP node build
@@ -138,7 +138,7 @@ If you need to read the left-most address instead (and don't care about spoofing
 
 ### `BODY_SIZE_LIMIT`
 
-The maximum request body size to accept in bytes including while streaming. The body size can also be specified with a unit suffix for kilobytes (`K`), megabytes (`M`), or gigabytes (`G`). For example, `512K` or `1M`. Defaults to 512kb. You can disable this option with a value of `Infinity` (0 in older versions of the adapter) and implement a custom check in [`handle`](/advanced/hooks#handle) if you need something more advanced.
+The maximum request body size to accept in bytes including while streaming. The body size can also be specified with a unit suffix for kilobytes (`K`), megabytes (`M`), or gigabytes (`G`). For example, `512K` or `1M`. Defaults to 512kb. You can disable this option with a value of `Infinity` (0 in older versions of the adapter) and implement a custom check in [`handle`](/SvelteKit-Audited/advanced/hooks#handle) if you need something more advanced.
 
 ### `SHUTDOWN_TIMEOUT`
 

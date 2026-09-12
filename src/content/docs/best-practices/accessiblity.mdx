@@ -34,7 +34,7 @@ This will allow screen readers and other assistive technology to identify the ne
 
 In traditional server-rendered applications, every navigation will reset focus to the top of the page. This ensures that people browsing the web with a keyboard or screen reader will start interacting with the page from the beginning.
 
-To simulate this behavior during client-side routing, SvelteKit focuses the `<body>` element after each navigation and [enhanced form submission](/core-concepts/form-actions/#progressive-enhancement). There is one exception - if an element with the [`autofocus`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autofocus) attribute is present, SvelteKit will focus that element instead. Make sure to [consider the implications for assistive technology](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/autofocus#accessibility_concerns) when using that attribute.
+To simulate this behavior during client-side routing, SvelteKit focuses the `<body>` element after each navigation and [enhanced form submission](/SvelteKit-Audited/core-concepts/form-actions/#progressive-enhancement). There is one exception - if an element with the [`autofocus`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autofocus) attribute is present, SvelteKit will focus that element instead. Make sure to [consider the implications for assistive technology](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/autofocus#accessibility_concerns) when using that attribute.
 
 If you want to customize SvelteKit's focus management, you can use the `afterNavigate` hook:
 
@@ -59,7 +59,7 @@ By default, SvelteKit's page template sets the default language of the document 
 <html lang="de">
 ```
 
-If your content is available in multiple languages, you should set the `lang` attribute based on the language of the current page. You can do this with SvelteKit's [handle hook](/advanced/hooks/#handle):
+If your content is available in multiple languages, you should set the `lang` attribute based on the language of the current page. You can do this with SvelteKit's [handle hook](/SvelteKit-Audited/advanced/hooks/#handle):
 
 ```html
 // file: src/app.html

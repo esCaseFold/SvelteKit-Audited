@@ -160,7 +160,7 @@ Often, a page will need to load some data before it can be rendered. For this, w
   </TabItem>
 </Tabs>
 
-This function runs alongside `+page.svelte`, which means it runs on the server during server-side rendering and in the browser during client-side navigation. See [`load`](/core-concepts/loading-data/) for full details of the API.
+This function runs alongside `+page.svelte`, which means it runs on the server during server-side rendering and in the browser during client-side navigation. See [`load`](/SvelteKit-Audited/core-concepts/loading-data/) for full details of the API.
 
 As well as load, `+page.js` can export values that configure the page’s behaviour:
 
@@ -168,7 +168,7 @@ As well as load, `+page.js` can export values that configure the page’s behavi
 - export const ssr = true or false
 - export const csr = true or false
 
-You can find more information about these in [page options](/core-concepts/page-options/).
+You can find more information about these in [page options](/SvelteKit-Audited/core-concepts/page-options/).
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -207,11 +207,11 @@ You can find more information about these in [page options](/core-concepts/page-
   </TabItem>
 </Tabs>
 
-During client-side navigation, SvelteKit will load this data from the server, which means that the returned value must be serializable using devalue. See [`load`](/core-concepts/loading-data/) for full details of the API.
+During client-side navigation, SvelteKit will load this data from the server, which means that the returned value must be serializable using devalue. See [`load`](/SvelteKit-Audited/core-concepts/loading-data/) for full details of the API.
 
 Like `+page.js`, `+page.server.js` can export page options — `prerender`, `ssr` and `csr`.
 
-A `+page.server.js` file can also export *actions*. If load lets you read data from the server, `actions` let you write data *to* the server using the `<form>` element. To learn how to use them, see the [`form actions`](/core-concepts/form-actions/) section.
+A `+page.server.js` file can also export *actions*. If load lets you read data from the server, `actions` let you write data *to* the server using the `<form>` element. To learn how to use them, see the [`form actions`](/SvelteKit-Audited/core-concepts/form-actions/) section.
 
 ### +page.server.js
 If your `load` function can only run on the server — for example, if it needs to fetch data from a database or you need to access private [environment variables](https://svelte.dev/docs/kit/$env-static-private) like API keys — then you can rename `+page`.js to `+page.server.js` and change the `PageLoad` type to `PageServerLoad`.
@@ -258,7 +258,7 @@ If no route can be found (404), src/routes/+error.svelte (or the default error p
 `+error.svelte` is *not* used when an error occurs inside [`handle`](/advanced/hooks#handle) or a [`+server.js`](/core-concepts/routing#server) request handler.
 :::
 
-You can read more about error handling [here](/advanced/errors/).
+You can read more about error handling [here](/SvelteKit-Audited/advanced/errors/).
 
 ## +layout
 So far, we’ve treated pages as entirely standalone components — upon navigation, the existing `+page.svelte` component will be destroyed, and a new one will take its place.
@@ -382,7 +382,7 @@ We can create a layout that only applies to pages below `/settings` (while inher
 </details>
 
 ### +layout.js
-Just like `+page.svelte` loading data from `+page.js`, your `+layout.svelte` component can get data from a [`load`](/core-concepts/loading-data/) function in `+layout.js`.
+Just like `+page.svelte` loading data from `+page.js`, your `+layout.svelte` component can get data from a [`load`](/SvelteKit-Audited/core-concepts/loading-data/) function in `+layout.js`.
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -416,7 +416,7 @@ Just like `+page.svelte` loading data from `+page.js`, your `+layout.svelte` com
   </TabItem>
 </Tabs>
 
-If a `+layout.js` exports [page options](/core-concepts/page-options/) — `prerender`, `ssr` and `csr` — they will be used as defaults for child pages.
+If a `+layout.js` exports [page options](/SvelteKit-Audited/core-concepts/page-options/) — `prerender`, `ssr` and `csr` — they will be used as defaults for child pages.
 
 Data returned from a layout’s `load` function is also available to all its child pages:
 
@@ -453,10 +453,10 @@ Often, layout data is unchanged when navigating between pages. SvelteKit will in
 ### +layout.server.js
 To run your layout’s `load` function on the server, move it to `+layout.server.js`, and change the `LayoutLoad` type to `LayoutServerLoad`.
 
-Like `+layout.js`, `+layout.server.js` can export [page options](/core-concepts/page-options/) — `prerender`, `ssr` and `csr`.
+Like `+layout.js`, `+layout.server.js` can export [page options](/SvelteKit-Audited/core-concepts/page-options/) — `prerender`, `ssr` and `csr`.
 
 ## +server
-As well as pages, you can define routes with a `+server.js` file (sometimes referred to as an ‘API route’ or an ‘endpoint’), which gives you full control over the response. Your `+server.js` file exports functions corresponding to HTTP verbs like `GET`, `POST`, `PATCH`, `PUT`, `DELETE`, `OPTIONS`, and `HEAD` that take a [`RequestEvent`](/reference/sveltejs-kit/#requestevent) argument and return a [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object.
+As well as pages, you can define routes with a `+server.js` file (sometimes referred to as an ‘API route’ or an ‘endpoint’), which gives you full control over the response. Your `+server.js` file exports functions corresponding to HTTP verbs like `GET`, `POST`, `PATCH`, `PUT`, `DELETE`, `OPTIONS`, and `HEAD` that take a [`RequestEvent`](/SvelteKit-Audited/reference/sveltejs-kit/#requestevent) argument and return a [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) object.
 
 For example we could create an /api/random-number route with a GET handler:
 <Tabs syncKey="languages">
@@ -595,7 +595,7 @@ By exporting `POST` / `PUT`/`PATCH`/`DELETE`/`OPTIONS`/`HEAD` handlers, `+server
 </Tabs>
 
 :::note
-In general, [`form actions`](/core-concepts/form-actions) are a better way to submit data from the browser to the server.
+In general, [`form actions`](/SvelteKit-Audited/core-concepts/form-actions) are a better way to submit data from the browser to the server.
 :::
 
 :::note
@@ -676,7 +676,6 @@ For example, annotating `let { data } = $props()` with `PageProps` (or LayoutPro
   </TabItem>
 </Tabs>
 
-*this aside is rediculous, change this to something else in the audit*
 :::note
 The `PageProps` and `LayoutProps` types, added in 2.16.0, are a shortcut for typing the `data` prop as `PageData` or `LayoutData`, as well as other `props`, such as `form` for pages, or `children` for layouts. In earlier versions, you had to type these properties manually. For example, for a page:
 

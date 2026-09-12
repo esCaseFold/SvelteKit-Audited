@@ -47,8 +47,8 @@ The `src` directory contains the meat of your project. Everything except `src/ro
 
 - `lib` contains your library code (utilities and components), which can be imported via the [`$lib`](https://svelte.dev/docs/kit/$lib) alias, or packaged up for distribution using [`svelte-package`](https://svelte.dev/docs/kit/packaging)
   - `server` contains your server-only library code. It can be imported by using the [`$lib/server`](https://svelte.dev/docs/kit/server-only-modules) alias. SvelteKit will prevent you from importing these in client code.
-- `params` contains any [param matchers](/advanced/advanced-routing#matching) your app needs
-- `routes` contains the [routes](/core-concepts/routing/) of your application. You can also colocate other components that are only used within a single route here
+- `params` contains any [param matchers](/SvelteKit-Audited/advanced/advanced-routing#matching) your app needs
+- `routes` contains the [routes](/SvelteKit-Audited/core-concepts/routing/) of your application. You can also colocate other components that are only used within a single route here
 - `app.html` is your page template — an HTML document containing the following placeholders:
   - `%sveltekit.head%` — `<link>` and `<script>` elements needed by the app, plus any `<svelte:head>` content
   - `%sveltekit.body%` — the markup for a rendered page. This should live inside a `<div>` or other element, rather than directly inside `<body>`, to prevent bugs caused by browser extensions injecting elements that are then destroyed by the hydration process. SvelteKit will warn you in development if this is not the case
@@ -59,9 +59,9 @@ The `src` directory contains the meat of your project. Everything except `src/ro
 - `error.html` is the page that is rendered when everything else fails. It can contain the following placeholders:
   - `%sveltekit.status%` — the HTTP status
   - `%sveltekit.error.message%` — the error message
-- `hooks.client.js` contains your client [hooks](/advanced/hooks)
-- `hooks.server.js` contains your server [hooks](/advanced/hooks)
-- `service-worker.js` contains your [service worker](/advanced/service-workers)
+- `hooks.client.js` contains your client [hooks](/SvelteKit-Audited/advanced/hooks)
+- `hooks.server.js` contains your server [hooks](/SvelteKit-Audited/advanced/hooks)
+- `service-worker.js` contains your [service worker](/SvelteKit-Audited/advanced/service-workers)
 - `instrumentation.server.js` contains your [observability](https://svelte.dev/docs/kit/observability) setup and instrumentation code
   - Requires adapter support. If your adapter supports it, it is guaranteed to run prior to loading and running your application code.
 

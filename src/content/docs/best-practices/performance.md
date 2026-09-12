@@ -28,7 +28,7 @@ Your browser also includes useful developer tools for analysing your site, wheth
 * Firefox - [Network](https://firefox-source-docs.mozilla.org/devtools-user/network_monitor/) and [Performance](https://hacks.mozilla.org/2022/03/performance-tool-in-firefox-devtools-reloaded/) devtools
 * Safari - [enhancing the performance of your webpage](https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/Web_Inspector_Tutorial/EnhancingyourWebpagesPerformance/EnhancingyourWebpagesPerformance.html)
 
-Note that your site running locally in `dev` mode will exhibit different behaviour than your production app, so you should do performance testing in [preview](/build-and-deploy/building-your-app#preview-your-app) mode after building.
+Note that your site running locally in `dev` mode will exhibit different behaviour than your production app, so you should do performance testing in [preview](/SvelteKit-Audited/build-and-deploy/building-your-app#preview-your-app) mode after building.
 
 ### Instrumenting
 
@@ -38,7 +38,7 @@ If you see in the network tab of your browser that an API call is taking a long 
 
 ### Images
 
-Reducing the size of image files is often one of the most impactful changes you can make to a site's performance. Svelte provides the `@sveltejs/enhanced-img` package, detailed on the [images](/best-practices/images) page, for making this easier. Additionally, Lighthouse is useful for identifying the worst offenders.
+Reducing the size of image files is often one of the most impactful changes you can make to a site's performance. Svelte provides the `@sveltejs/enhanced-img` package, detailed on the [images](/SvelteKit-Audited/best-practices/images) page, for making this easier. Additionally, Lighthouse is useful for identifying the worst offenders.
 
 ### Videos
 
@@ -50,7 +50,7 @@ Video files can be very large, so extra care should be taken to ensure that they
 
 ### Fonts
 
-SvelteKit automatically preloads critical `.js` and `.css` files when the user visits a page, but it does _not_ preload fonts by default, since this may cause unnecessary files (such as font weights that are referenced by your CSS but not actually used on the current page) to be downloaded. Having said that, preloading fonts correctly can make a big difference to how fast your site feels. In your [`handle`](/advanced/hooks#handle) hook, you can call `resolve` with a `preload` filter that includes your fonts.
+SvelteKit automatically preloads critical `.js` and `.css` files when the user visits a page, but it does _not_ preload fonts by default, since this may cause unnecessary files (such as font weights that are referenced by your CSS but not actually used on the current page) to be downloaded. Having said that, preloading fonts correctly can make a big difference to how fast your site feels. In your [`handle`](/SvelteKit-Audited/advanced/hooks#handle) hook, you can call `resolve` with a `preload` filter that includes your fonts.
 
 You can reduce the size of font files by [subsetting](https://web.dev/learn/performance/optimize-web-fonts#subset_your_web_fonts) your fonts.
 
@@ -78,11 +78,11 @@ Code imported with static `import` declarations will be automatically bundled wi
 
 ### Preloading
 
-You can speed up client-side navigations by eagerly preloading the necessary code and data, using [link options](/advanced/link-options). This is configured by default on the `<body>` element when you create a new SvelteKit app.
+You can speed up client-side navigations by eagerly preloading the necessary code and data, using [link options](/SvelteKit-Audited/advanced/link-options). This is configured by default on the `<body>` element when you create a new SvelteKit app.
 
 ### Non-essential Data
 
-For slow-loading data that isn't needed immediately, the object returned from your `load` function can contain promises rather than the data itself. For server `load` functions, this will cause the data to [stream](/core-concepts/loading-data#streaming-with-promises) in after the navigation (or initial page load).
+For slow-loading data that isn't needed immediately, the object returned from your `load` function can contain promises rather than the data itself. For server `load` functions, this will cause the data to [stream](/SvelteKit-Audited/core-concepts/loading-data#streaming-with-promises) in after the navigation (or initial page load).
 
 ### Preventing Waterfalls
 
@@ -93,11 +93,11 @@ In the browser, waterfalls can occur when your HTML kicks off request chains suc
 - Enabling [single page app (SPA) mode](https://svelte.dev/docs/kit/single-page-apps) will cause such waterfalls. With SPA mode, an empty page is generated, which fetches JavaScript, which ultimately loads and renders the page. This results in extra network round trips before a single pixel can be displayed.
 
 Waterfalls can also occur on calls to the backend whether made from the browser or server. E.g. if a universal `load` function makes an API call to fetch the current user, then uses the details from that response to fetch a list of saved items, and then uses _that_ response to fetch the details for each item, the browser will end up making multiple sequential requests. This is deadly for performance, especially for users that are physically located far from your backend.
-- Avoid this issue by using [server `load` functions](/core-concepts/loading-data#universal-vs-server) to make requests to backend services that are dependencies from the server rather than from the browser. Note, however, that server `load` functions are also not immune to waterfalls (though they are much less costly since they rarely involve round trips with high latency). For example, if you query a database to get the current user and then use that data to make a second query for a list of saved items, it will typically be more performant to issue a single query with a database join.
+- Avoid this issue by using [server `load` functions](/SvelteKit-Audited/core-concepts/loading-data#universal-vs-server) to make requests to backend services that are dependencies from the server rather than from the browser. Note, however, that server `load` functions are also not immune to waterfalls (though they are much less costly since they rarely involve round trips with high latency). For example, if you query a database to get the current user and then use that data to make a second query for a list of saved items, it will typically be more performant to issue a single query with a database join.
 
 ## Hosting
 
-Your frontend should be located in the same data center as your backend to minimize latency. For sites with no central backend, many SvelteKit adapters support deploying to the _edge_, which means handling each user's requests from a nearby server. This can reduce load times significantly. Some adapters even support [configuring deployment on a per-route basis](/core-concepts/page-options/#config). You should also consider serving images from a CDN (which are typically edge networks) — the hosts for many SvelteKit adapters will do this automatically.
+Your frontend should be located in the same data center as your backend to minimize latency. For sites with no central backend, many SvelteKit adapters support deploying to the _edge_, which means handling each user's requests from a nearby server. This can reduce load times significantly. Some adapters even support [configuring deployment on a per-route basis](/SvelteKit-Audited/core-concepts/page-options/#config). You should also consider serving images from a CDN (which are typically edge networks) — the hosts for many SvelteKit adapters will do this automatically.
 
 Ensure your host uses HTTP/2 or newer. Vite's code splitting creates numerous small files for improved cacheability, which results in excellent performance, but this does assume that your files can be loaded in parallel with HTTP/2.
 

@@ -74,4 +74,4 @@ Since SvelteKit projects are built with Vite, you can use Vite plugins to enhanc
 
 ## Integration FAQs
 
-[The SvelteKit FAQ](/appendix/faq/) answers many questions about how to do X with SvelteKit, which may be helpful if you still have questions.
+[The SvelteKit FAQ](/SvelteKit-Audited/appendix/faq/) answers many questions about how to do X with SvelteKit, which may be helpful if you still have questions.

@@ -21,7 +21,7 @@ error(500, 'something went wrong');
 
 `svelte-migrate` will do these changes automatically for you.
 
-If the error or redirect is thrown inside a `try {...}` block (hint: don't do this!), you can distinguish them from unexpected errors using [`isHttpError`](/reference/@sveltejs-kit#ishttperror) and [`isRedirect`](/reference/@sveltejs-kit#isredirect) imported from `@sveltejs/kit`.
+If the error or redirect is thrown inside a `try {...}` block (hint: don't do this!), you can distinguish them from unexpected errors using [`isHttpError`](/SvelteKit-Audited/reference/@sveltejs-kit#ishttperror) and [`isRedirect`](/SvelteKit-Audited/reference/@sveltejs-kit#isredirect) imported from `@sveltejs/kit`.
 
 ## path is Required When Setting Cookies
 
@@ -123,7 +123,7 @@ Because of this, dynamic environment variables can no longer be read during prer
 
 ## `form` and `data` Have Been Removed from `use:enhance` Callbacks
 
-If you provide a callback to [`use:enhance`](/core-concepts/form-actions/#useenhance), it will be called with an object containing various useful properties.
+If you provide a callback to [`use:enhance`](/SvelteKit-Audited/core-concepts/form-actions/#useenhance), it will be called with an object containing various useful properties.
 
 In SvelteKit 1, those properties included `form` and `data`. These were deprecated some time ago in favour of `formElement` and `formData`, and have been removed altogether in SvelteKit 2.
 

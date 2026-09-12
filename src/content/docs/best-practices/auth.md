@@ -15,7 +15,7 @@ In contrast, JWT generally are not checked against a datastore, which means they
 
 ## Integration Points
 
-Auth [cookies](/reference/@sveltejs-kit#cookies) can be checked inside [server hooks](/advanced/hooks). If a user is found matching the provided credentials, the user information can be stored in [`locals`](/advanced/hooks#handle-locals).
+Auth [cookies](/SvelteKit-Audited/reference/@sveltejs-kit#cookies) can be checked inside [server hooks](/SvelteKit-Audited/advanced/hooks). If a user is found matching the provided credentials, the user information can be stored in [`locals`](/SvelteKit-Audited/advanced/hooks#handle-locals).
 
 ## Libraries
 

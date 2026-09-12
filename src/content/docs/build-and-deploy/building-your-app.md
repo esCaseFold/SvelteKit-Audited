@@ -5,7 +5,7 @@ sidebar:
 ---
 Building a SvelteKit app happens in two stages, which both happen when you run `vite build` (usually via `npm run build`).
 
-Firstly, Vite creates an optimized production build of your server code, your browser code, and your service worker (if you have one). [Prerendering](/core-concepts/page-options/#prerender) is executed at this stage, if appropriate.
+Firstly, Vite creates an optimized production build of your server code, your browser code, and your service worker (if you have one). [Prerendering](/SvelteKit-Audited/core-concepts/page-options/#prerender) is executed at this stage, if appropriate.
 
 Secondly, an _adapter_ takes this production build and tunes it for your target environment — more on this on the following pages.
 
@@ -28,4 +28,4 @@ export function load() {
 
 ## Preview Your App
 
-After building, you can view your production build locally with `vite preview` (via `npm run preview`). Note that this will run the app in Node, and so is not a perfect reproduction of your deployed app — adapter-specific adjustments like the [link doesn't work] [`platform` object](/build-and-deploy/adapters/#platform-specific-context) do not apply to previews.
+After building, you can view your production build locally with `vite preview` (via `npm run preview`). Note that this will run the app in Node, and so is not a perfect reproduction of your deployed app — adapter-specific adjustments like the [link doesn't work] [`platform` object](/SvelteKit-Audited/build-and-deploy/adapters/#platform-specific-context) do not apply to previews.

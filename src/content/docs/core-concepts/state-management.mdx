@@ -67,7 +67,7 @@ Conceptually, that is. In reality, servers are often long-lived and shared by mu
 
 The `user` variable is shared by everyone who connects to this server. If Alice submitted an embarrassing secret, and Bob visited the page after her, Bob would know Alice's secret. In addition, when Alice returns to the site later in the day, the server may have restarted, losing her data.
 
-Instead, you should _authenticate_ the user using [`cookies`](load#Cookies) and persist the data to a database.
+Instead, you should _authenticate_ the user using [`cookies`](/SvelteKit-Audited/core-concepts/loading-data/#cookies) and persist the data to a database.
 
 ## No Side-effects in Load
 
@@ -136,7 +136,7 @@ As with the previous example, this puts one user's information in a place that i
   </TabItem>
 </Tabs>
 
-...and pass it around to the components that need it, or use [`page.data`](/core-concepts/loading-data#pagedata).
+...and pass it around to the components that need it, or use [`page.data`](/SvelteKit-Audited/core-concepts/loading-data/#pagedata).
 
 If you're not using SSR, then there's no risk of accidentally exposing one user's data to another. But you should still avoid side-effects in your `load` functions — your application will be much easier to reason about without them.
 

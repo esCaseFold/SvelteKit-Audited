@@ -16,7 +16,7 @@ You can add additional properties, like a `code` or a tracking `id`, as shown in
 
 ## Expected Errors
 
-An _expected_ error is one created with the [`error`](/reference/@sveltejs-kit#error) helper imported from `@sveltejs/kit`:
+An _expected_ error is one created with the [`error`](/SvelteKit-Audited/reference/@sveltejs-kit#error) helper imported from `@sveltejs/kit`:
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -61,7 +61,7 @@ An _expected_ error is one created with the [`error`](/reference/@sveltejs-kit#e
   </TabItem>
 </Tabs>
 
-This throws an exception that SvelteKit catches, causing it to set the response status code to 404 and render an [`+error.svelte`](/core-concepts/routing#error) component, where `page.error` is the object provided as the second argument to `error(...)`.
+This throws an exception that SvelteKit catches, causing it to set the response status code to 404 and render an [`+error.svelte`](/SvelteKit-Audited/core-concepts/routing#error) component, where `page.error` is the object provided as the second argument to `error(...)`.
 
 <Tabs syncKey="languages">
   <TabItem label="JavaScript" icon="seti:javascript">
@@ -108,7 +108,7 @@ error(404, 'Not found');
 ```
 
 :::note[Previous Version Note]
-[In SvelteKit 1.x](/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the `error` yourself
+[In SvelteKit 1.x](/SvelteKit-Audited/appendix/migrating-to-sveltekit-v2/#redirect-and-error-are-no-longer-thrown-by-you) you had to `throw` the `error` yourself
 :::
 
 ## Unexpected Errors
@@ -121,7 +121,7 @@ By default, unexpected errors are printed to the console (or, in production, you
 { "message": "Internal Error" }
 ```
 
-Unexpected errors will go through the [`handleError`](/advanced/hooks#handleerror) hook, where you can add your own error handling — for example, sending errors to a reporting service, or returning a custom error object which becomes `page.error`.
+Unexpected errors will go through the [`handleError`](/SvelteKit-Audited/advanced/hooks#handleerror) hook, where you can add your own error handling — for example, sending errors to a reporting service, or returning a custom error object which becomes `page.error`.
 
 ## Rendering Errors
 
@@ -143,9 +143,9 @@ const config = {
 export default config;
 ```
 
-When this is enabled, SvelteKit will wrap your route components in an error boundary. If an error occurs during rendering, the nearest [`+error.svelte`](/core-concepts/routing#error) page will be shown, just as if the error had occurred in a `load` function.
+When this is enabled, SvelteKit will wrap your route components in an error boundary. If an error occurs during rendering, the nearest [`+error.svelte`](/SvelteKit-Audited/core-concepts/routing#error) page will be shown, just as if the error had occurred in a `load` function.
 
-The error is first passed to [`handleError`](/advanced/hooks#handleerror), allowing you to report it and transform it, before the resulting object is passed to the `+error.svelte` component.
+The error is first passed to [`handleError`](/SvelteKit-Audited/advanced/hooks#handleerror), allowing you to report it and transform it, before the resulting object is passed to the `+error.svelte` component.
 
 :::note
 Since rendering errors occur after the page has started rendering, and multiple boundaries could in parallel catch distinct errors, the [`page`](https://svelte.dev/docs/kit/$app-state#page) object (and its `error` property) will not be updated. Instead, the error is passed directly to the `+error.svelte` component as a prop.
@@ -188,7 +188,7 @@ The same applies for other error boundaries you define in your code:
 
 ## Responses
 
-If an error occurs inside `handle` or inside a [`+server.js`](/core-concepts/routing#server) request handler, SvelteKit will respond with either a fallback error page or a JSON representation of the error object, depending on the request's `Accept` headers.
+If an error occurs inside `handle` or inside a [`+server.js`](/SvelteKit-Audited/core-concepts/routing#server) request handler, SvelteKit will respond with either a fallback error page or a JSON representation of the error object, depending on the request's `Accept` headers.
 
 You can customise the fallback error page by adding a `src/error.html` file:
 
@@ -209,7 +209,7 @@ You can customise the fallback error page by adding a `src/error.html` file:
 
 SvelteKit will replace `%sveltekit.status%` and `%sveltekit.error.message%` with their corresponding values.
 
-If the error instead occurs inside a `load` function while rendering a page, SvelteKit will render the [`+error.svelte`](/core-concepts/routing#error) component nearest to where the error occurred. If the error occurs inside a `load` function in `+layout(.server).js`, the closest error boundary in the tree is an `+error.svelte` file _above_ that layout (not next to it).
+If the error instead occurs inside a `load` function while rendering a page, SvelteKit will render the [`+error.svelte`](/SvelteKit-Audited/core-concepts/routing#error) component nearest to where the error occurred. If the error occurs inside a `load` function in `+layout(.server).js`, the closest error boundary in the tree is an `+error.svelte` file _above_ that layout (not next to it).
 
 The exception is when the error occurs inside the root `+layout.js` or `+layout.server.js`, since the root layout would ordinarily _contain_ the `+error.svelte` component. In this case, SvelteKit uses the fallback error page.
 
