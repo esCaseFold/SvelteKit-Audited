@@ -1,4 +1,4 @@
-# TWMP Assignment #2: Auditing SvelteKit Docs and Recreating Using Astro Starlight
+# TWMP Assignment #2: Auditing and Recreating SvelteKit Docs Using Astro Starlight
 
 [![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
 
